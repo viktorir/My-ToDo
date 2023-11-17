@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">My ToDo</string>
+    <string name="tasksHeader">Tasks:</string>
+    <string name="taskHint">Task</string>
+    <string name="descriptionHint">description</string>
+    <string name="priorityButton">Priority</string>
+    <string name="unChangeCategory">No category</string>
+    <string name="unChangeDeadline">Today</string>
+    <string name="addButton">Add</string>
+    <string name="updateButton">Update</string>
+</resources>
