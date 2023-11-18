@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentResultListener;
 
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -51,6 +53,38 @@ public class UpdateTask extends BottomSheetDialogFragment {
             text = getArguments().getString("text");
             priority = getArguments().getInt("priority");
         }
+
+        getActivity().getSupportFragmentManager().setFragmentResultListener(
+                "priorityData",
+                this,
+                new FragmentResultListener() {
+                    @Override
+                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle results) {
+                        int result = results.getInt("priority");
+                        Toast.makeText(getContext(), String.valueOf(result), Toast.LENGTH_SHORT).show();
+                        priorityButton.setHint(String.valueOf(result));
+                        switch (result) {
+                            case 1:
+                                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_1, 0, 0, 0);
+                                break;
+                            case 2:
+                                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_2, 0, 0, 0);
+                                break;
+                            case 3:
+                                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_3, 0, 0, 0);
+                                break;
+                            case 4:
+                                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_4, 0, 0, 0);
+                                break;
+                            case 5:
+                                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_5, 0, 0, 0);
+                                break;
+                        }
+
+
+                    }
+                }
+        );
 
         titleTask = view.findViewById(R.id.TitleTask);
         descriptionTask = view.findViewById(R.id.DescriptionTask);
@@ -95,7 +129,7 @@ public class UpdateTask extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 DataBaseHelper db = new DataBaseHelper(UpdateTask.this.getContext());
-                db.updateTask(id ,titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim());
+                db.updateTask(id ,titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt((String) priorityButton.getHint()));
                 dismiss();
             }
         });

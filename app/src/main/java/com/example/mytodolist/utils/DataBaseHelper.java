@@ -91,7 +91,23 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void insertTask(int categoryId, String title, String text,        Date deadline, boolean isDone, int priority) {
+    public void insertTask(String title, String text, int priority) {
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("title", title);
+        cv.put("text", text);
+        cv.put("priority", priority);
+
+        long result = db.insert("Tasks", null, cv);
+        if (result == -1) {
+            Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "New task create!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void insertTask(int categoryId, String title, String text, Date deadline, boolean isDone, int priority) {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -145,6 +161,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         cv.put("title", title);
         cv.put("text", text);
+
+        long result = db.update("Tasks", cv, "id_task=?", new String[]{String.valueOf(id)});
+        if(result == -1){
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(context, "Updated Successfully!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void updateTask(int id, String title, String text, int priority) {
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("title", title);
+        cv.put("text", text);
+        cv.put("priority", priority);
 
         long result = db.update("Tasks", cv, "id_task=?", new String[]{String.valueOf(id)});
         if(result == -1){

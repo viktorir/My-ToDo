@@ -32,6 +32,9 @@ public class ChangePriority extends BottomSheetDialogFragment {
         p1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle result = new Bundle();
+                result.putInt("priority", 1);
+                getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);
                 dismiss();
             }
         });
@@ -40,7 +43,9 @@ public class ChangePriority extends BottomSheetDialogFragment {
         p2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+                Bundle result = new Bundle();
+                result.putInt("priority", 2);
+                getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);dismiss();
             }
         });
 
@@ -48,6 +53,9 @@ public class ChangePriority extends BottomSheetDialogFragment {
         p3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle result = new Bundle();
+                result.putInt("priority", 3);
+                getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);
                 dismiss();
             }
         });
@@ -56,6 +64,9 @@ public class ChangePriority extends BottomSheetDialogFragment {
         p4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle result = new Bundle();
+                result.putInt("priority", 4);
+                getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);
                 dismiss();
             }
         });
@@ -64,6 +75,9 @@ public class ChangePriority extends BottomSheetDialogFragment {
         p5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle result = new Bundle();
+                result.putInt("priority", 5);
+                getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);
                 dismiss();
             }
         });
