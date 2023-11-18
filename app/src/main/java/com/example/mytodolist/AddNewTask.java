@@ -55,25 +55,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
                         int result = results.getInt("priority");
                         Toast.makeText(getContext(), String.valueOf(result), Toast.LENGTH_SHORT).show();
                         priorityButton.setHint(String.valueOf(result));
-                        switch (result) {
-                            case 1:
-                                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_1, 0, 0, 0);
-                                break;
-                            case 2:
-                                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_2, 0, 0, 0);
-                                break;
-                            case 3:
-                                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_3, 0, 0, 0);
-                                break;
-                            case 4:
-                                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_4, 0, 0, 0);
-                                break;
-                            case 5:
-                                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_5, 0, 0, 0);
-                                break;
-                        }
-
-
+                        setPriorityButtonIcon(result);
                     }
                 }
         );
@@ -117,6 +99,26 @@ public class AddNewTask extends BottomSheetDialogFragment {
                 ChangePriority.newInstance().show(getActivity().getSupportFragmentManager(), ChangePriority.TAG);
             }
         });
+    }
+
+    private void setPriorityButtonIcon(int id) {
+        switch (id) {
+            case 1:
+                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_1, 0, 0, 0);
+                break;
+            case 2:
+                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_2, 0, 0, 0);
+                break;
+            case 3:
+                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_3, 0, 0, 0);
+                break;
+            case 4:
+                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_4, 0, 0, 0);
+                break;
+            case 5:
+                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_5, 0, 0, 0);
+                break;
+        }
     }
 
     public void onDismiss(@NonNull DialogInterface dialog) {
