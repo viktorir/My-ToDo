@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +22,10 @@ import com.example.mytodolist.utils.DataBaseHelper;
 
 import java.util.List;
 
-public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder> {
+public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int TASK_VIEW = R.layout.task_layout;
+    private static final int NO_TASKS_VIEW = R.layout.no_tasks_layout;
     private List<TaskModel> tasksList;
     Context context;
     DataBaseHelper db;
@@ -34,66 +37,78 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        return new MyViewHolder(inflater.inflate(R.layout.task_layout, parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(viewType, parent, false);
+        RecyclerView.ViewHolder viewHolder = null;
+
+        if (viewType == TASK_VIEW) viewHolder = new TaskViewHolder(view);
+        if (viewType == NO_TASKS_VIEW) viewHolder = new NoTasksViewHolder(view);
+
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        final TaskModel task = tasksList.get(position);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof TaskViewHolder) {
+            final TaskModel task = tasksList.get(position);
 
-        if (task.getCategoryId() == 0) holder.categoryView.setText("No category");
-        else holder.categoryView.setText(String.valueOf(task.getCategoryId()));
-        holder.textView.setText(task.getText());
+            if (task.getCategoryId() == 0) ((TaskViewHolder)holder).categoryView.setText("No category");
+            else ((TaskViewHolder)holder).categoryView.setText(task.getCategoryName());
 
-        if (task.getText() == null) holder.textView.setVisibility(View.GONE);
-        else holder.textView.setVisibility(View.VISIBLE);
+            ((TaskViewHolder)holder).textView.setText(task.getText());
 
-        switch (task.getPriority()) {
-            case 1:
-                holder.priorityView.setImageResource(R.drawable.priority_1);
-                break;
-            case 2:
-                holder.priorityView.setImageResource(R.drawable.priority_2);
-                break;
-            case 3:
-                holder.priorityView.setImageResource(R.drawable.priority_3);
-                break;
-            case 4:
-                holder.priorityView.setImageResource(R.drawable.priority_4);
-                break;
-            case 5:
-                holder.priorityView.setImageResource(R.drawable.priority_5);
-                break;
-        }
+            if (task.getText() == null) ((TaskViewHolder)holder).textView.setVisibility(View.GONE);
+            else ((TaskViewHolder)holder).textView.setVisibility(View.VISIBLE);
 
-        if (task.getIsDone()) {
-            holder.radioButton.setChecked(true);
-            holder.radioButton.setSelected(true);
-        } else {
-            holder.radioButton.setChecked(false);
-            holder.radioButton.setSelected(false);
-        }
-
-        holder.titleView.setText(task.getTitle());
-        holder.titleView.setHint(String.valueOf(task.getIdTask()));
-        holder.titleView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
-                UpdateTask.newInstance(task.getIdTask(),
-                        task.getTitle(),
-                        task.getText(),
-                        task.getPriority()).show(manager, UpdateTask.TAG);
+            switch (task.getPriority()) {
+                case 1:
+                    ((TaskViewHolder)holder).priorityView.setImageResource(R.drawable.priority_1);
+                    break;
+                case 2:
+                    ((TaskViewHolder)holder).priorityView.setImageResource(R.drawable.priority_2);
+                    break;
+                case 3:
+                    ((TaskViewHolder)holder).priorityView.setImageResource(R.drawable.priority_3);
+                    break;
+                case 4:
+                    ((TaskViewHolder)holder).priorityView.setImageResource(R.drawable.priority_4);
+                    break;
+                case 5:
+                    ((TaskViewHolder)holder).priorityView.setImageResource(R.drawable.priority_5);
+                    break;
             }
-        });
 
+            if (task.getIsDone()) {
+                ((TaskViewHolder)holder).radioButton.setChecked(true);
+                ((TaskViewHolder)holder).radioButton.setSelected(true);
+            } else {
+                ((TaskViewHolder)holder).radioButton.setChecked(false);
+                ((TaskViewHolder)holder).radioButton.setSelected(false);
+            }
 
+            ((TaskViewHolder)holder).titleView.setText(task.getTitle());
+            ((TaskViewHolder)holder).titleView.setHint(String.valueOf(task.getIdTask()));
+            ((TaskViewHolder)holder).titleView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+                    UpdateTask.newInstance(task.getIdTask(),
+                            task.getTitle(),
+                            task.getText(),
+                            task.getPriority()).show(manager, UpdateTask.TAG);
+                }
+            });
+        }
+    }
+
+    public int getItemViewType(int position) {
+        if (tasksList.size() == 0) return NO_TASKS_VIEW;
+        else return TASK_VIEW;
     }
 
     @Override
     public int getItemCount() {
+        if (tasksList.size() == 0) return 1;
         return tasksList.size();
     }
 
@@ -108,13 +123,13 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
         notifyItemRangeChanged(pos, tasksList.size());
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class TaskViewHolder extends RecyclerView.ViewHolder {
 
         RadioButton radioButton;
         TextView textView, titleView, categoryView;
         ImageView priorityView;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
 
             radioButton = itemView.findViewById(R.id.RadioButton);
@@ -137,9 +152,13 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
                     removeAt(getAdapterPosition());
                 }
             });
+        }
+    }
 
+    public class NoTasksViewHolder extends RecyclerView.ViewHolder {
 
-
+        public NoTasksViewHolder(@NonNull View itemView) {
+            super(itemView);
         }
     }
 }

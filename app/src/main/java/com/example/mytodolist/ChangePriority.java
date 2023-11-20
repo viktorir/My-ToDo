@@ -15,6 +15,7 @@ public class ChangePriority extends BottomSheetDialogFragment {
     public static final String TAG = "ChangePriority";
 
     Button p1, p2, p3, p4, p5;
+
     public static ChangePriority newInstance() {
         return new ChangePriority();
     }

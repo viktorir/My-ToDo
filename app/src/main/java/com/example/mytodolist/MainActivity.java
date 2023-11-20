@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
     TextView header;
     RecyclerView taskList;
     FloatingActionButton createTask;
-
     TasksAdapter tasksAdapter;
     DataBaseHelper db;
     List<TaskModel> tasksList;

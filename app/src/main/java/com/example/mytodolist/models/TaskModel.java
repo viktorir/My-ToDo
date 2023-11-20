@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class TaskModel {
     private int idTask, categoryId, priority;
-    private String title, text, deadline;
+    private String title, text, deadline, categoryName;
     private boolean isDone;
 
     public String getTitle() {
@@ -70,5 +70,13 @@ public class TaskModel {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

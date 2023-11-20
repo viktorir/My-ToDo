@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.mytodolist.models.SubtaskModel;
 import com.example.mytodolist.models.TaskModel;
 
 import java.text.SimpleDateFormat;
@@ -62,57 +63,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertTask(String title) {
-        db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+    public void insertTask(String title) { this.insertTask(0, title, null, new Date(), false, 3); }
 
-        cv.put("title", title);
+    public void insertTask(String title, String text) { this.insertTask(0, title, text, new Date(), false, 3); }
 
-        long result = db.insert("Tasks", null, cv);
-        if (result == -1) {
-            Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "New task create!", Toast.LENGTH_SHORT).show();
-        }
-    }
+    public void insertTask(String title, String text, int priority) { this.insertTask(0, title, text, new Date(), false, priority); }
 
-    public void insertTask(String title, String text) {
-        db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        cv.put("title", title);
-        cv.put("text", text);
-
-        long result = db.insert("Tasks", null, cv);
-        if (result == -1) {
-            Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "New task create!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void insertTask(String title, String text, int priority) {
-        db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        cv.put("title", title);
-        cv.put("text", text);
-        cv.put("priority", priority);
-
-        long result = db.insert("Tasks", null, cv);
-        if (result == -1) {
-            Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "New task create!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void insertTask(int categoryId, String title, String text, Date deadline, boolean isDone, int priority) {
+    public void insertTask(int categoryId, String title, String text, Date deadline , boolean isDone, int priority) {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        cv.put("category_id", categoryId);
+        if (categoryId != 0) cv.put("category_id", categoryId);
         cv.put("title", title);
         cv.put("text", text);
         cv.put("deadline", formatter.format(deadline));
@@ -127,8 +89,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void insertSubtask() {
+
+    }
+
     public List<TaskModel> readTasks() {
-        String query = "SELECT * FROM Tasks";
+        String query = "SELECT * FROM Tasks LEFT JOIN Categories on category_id = id_category";
         db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -136,10 +102,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             cursor = db.rawQuery(query, null);
         }
 
-        List<TaskModel> taskList = new ArrayList<>();
-        if (cursor == null) return taskList;
+        List<TaskModel> tasksList = new ArrayList<>();
+        if (cursor == null) return tasksList;
         if (cursor.moveToFirst()) {
-            while (cursor.moveToNext()) {
+             do {
                 TaskModel task = new TaskModel();
                 task.setIdTask(cursor.getInt(cursor.getColumnIndexOrThrow("id_task")));
                 task.setCategoryId(cursor.getInt(cursor.getColumnIndexOrThrow("category_id")));
@@ -148,26 +114,42 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 task.setDeadline(cursor.getString(cursor.getColumnIndexOrThrow("deadline")));
                 task.setIsDone(cursor.getInt(cursor.getColumnIndexOrThrow("is_done")) > 0);
                 task.setPriority(cursor.getInt(cursor.getColumnIndexOrThrow("priority")));
-                taskList.add(task);
+                task.setCategoryName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+                tasksList.add(task);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return tasksList;
+    }
+
+    public List<SubtaskModel> readSubtasks() {
+        String query = "SELECT * FROM Subtasks";
+        db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+
+        List<SubtaskModel> subtasksList = new ArrayList<>();
+        if (cursor == null) return subtasksList;
+        if (cursor.moveToFirst()) {
+            while (cursor.moveToNext()) {
+                SubtaskModel subtask = new SubtaskModel();
+                subtask.setIdSubtask(cursor.getInt(cursor.getColumnIndexOrThrow("id_task")));
+                subtask.setTaskId(cursor.getInt(cursor.getColumnIndexOrThrow("category_id")));
+                subtask.setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
+                subtask.setText(cursor.getString(cursor.getColumnIndexOrThrow("text")));
+                subtask.setIsDone(cursor.getInt(cursor.getColumnIndexOrThrow("is_done")) > 0);
+                subtasksList.add(subtask);
             }
         }
         cursor.close();
-        return taskList;
+        return subtasksList;
     }
 
     public void updateTask(int id, String title, String text) {
-        db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        cv.put("title", title);
-        cv.put("text", text);
-
-        long result = db.update("Tasks", cv, "id_task=?", new String[]{String.valueOf(id)});
-        if(result == -1){
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Updated Successfully!", Toast.LENGTH_SHORT).show();
-        }
+        this.updateTask(id, title, text, 3);
     }
 
     public void updateTask(int id, String title, String text, int priority) {
@@ -186,6 +168,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void updateSubtask() {
+
+    }
+
     public void deleteTask(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete("Tasks", "id_task=?", new String[]{String.valueOf(id)});
@@ -194,5 +180,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }else{
             Toast.makeText(context, "Successfully Deleted.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void deleteSubtask() {
+
     }
 }

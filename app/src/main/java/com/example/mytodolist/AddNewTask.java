@@ -53,7 +53,6 @@ public class AddNewTask extends BottomSheetDialogFragment {
                     @Override
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle results) {
                         int result = results.getInt("priority");
-                        Toast.makeText(getContext(), String.valueOf(result), Toast.LENGTH_SHORT).show();
                         priorityButton.setHint(String.valueOf(result));
                         setPriorityButtonIcon(result);
                     }

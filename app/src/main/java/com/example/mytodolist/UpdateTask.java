@@ -15,9 +15,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mytodolist.adapters.SubtasksAdapter;
+import com.example.mytodolist.adapters.TasksAdapter;
+import com.example.mytodolist.models.SubtaskModel;
+import com.example.mytodolist.models.TaskModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UpdateTask extends BottomSheetDialogFragment {
     public static final String TAG = "UpdateTask";
@@ -25,6 +34,10 @@ public class UpdateTask extends BottomSheetDialogFragment {
     EditText titleTask;
     EditText descriptionTask;
     Button updateButton, priorityButton;
+    RecyclerView subtaskList;
+    SubtasksAdapter subtasksAdapter;
+    DataBaseHelper db;
+    List<SubtaskModel> subtasksList;
 
     int id, priority;
     String title, text;
@@ -61,7 +74,6 @@ public class UpdateTask extends BottomSheetDialogFragment {
                     @Override
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle results) {
                         int result = results.getInt("priority");
-                        Toast.makeText(getContext(), String.valueOf(result), Toast.LENGTH_SHORT).show();
                         priorityButton.setHint(String.valueOf(result));
                         setPriorityButtonIcon(result);
                     }
@@ -72,9 +84,10 @@ public class UpdateTask extends BottomSheetDialogFragment {
         descriptionTask = view.findViewById(R.id.DescriptionTask);
         updateButton = view.findViewById(R.id.UpdateButton);
         priorityButton = view.findViewById(R.id.PriorityButton);
+        subtaskList = view.findViewById(R.id.SubtasksList);
 
         titleTask.setText(title);
-
+        priorityButton.setHint(String.valueOf(priority));
         descriptionTask.setText(text);
 
         titleTask.addTextChangedListener(new TextWatcher() {
@@ -111,7 +124,7 @@ public class UpdateTask extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 DataBaseHelper db = new DataBaseHelper(UpdateTask.this.getContext());
-                db.updateTask(id ,titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt((String) priorityButton.getHint()));
+                db.updateTask(id ,titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt(String.valueOf(priorityButton.getHint())));
                 dismiss();
             }
         });
@@ -123,6 +136,16 @@ public class UpdateTask extends BottomSheetDialogFragment {
                 ChangePriority.newInstance().show(getActivity().getSupportFragmentManager(), ChangePriority.TAG);
             }
         });
+
+        db = new DataBaseHelper(getActivity());
+        subtasksList = new ArrayList<>();
+        subtasksAdapter = new SubtasksAdapter(getActivity(), db);
+
+        subtaskList.setLayoutManager(new LinearLayoutManager(getContext()));
+        subtaskList.setAdapter(subtasksAdapter);
+
+        subtasksList = db.readSubtasks();
+        subtasksAdapter.setSubtasks(subtasksList);
     }
 
     private void setPriorityButtonIcon(int id) {
