@@ -19,16 +19,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytodolist.adapters.SubtasksAdapter;
-import com.example.mytodolist.adapters.TasksAdapter;
 import com.example.mytodolist.models.SubtaskModel;
-import com.example.mytodolist.models.TaskModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateTask extends BottomSheetDialogFragment {
+public class UpdateTask extends BottomSheetDialogFragment implements OnDialogCloseListener {
     public static final String TAG = "UpdateTask";
 
     EditText titleTask;
@@ -60,13 +58,6 @@ public class UpdateTask extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null) {
-            id = getArguments().getInt("id_task");
-            title = getArguments().getString("title");
-            text = getArguments().getString("text");
-            priority = getArguments().getInt("priority");
-        }
-
         getActivity().getSupportFragmentManager().setFragmentResultListener(
                 "priorityData",
                 this,
@@ -80,7 +71,14 @@ public class UpdateTask extends BottomSheetDialogFragment {
                 }
         );
 
-        titleTask = view.findViewById(R.id.TitleTask);
+        if (getArguments() != null) {
+            id = getArguments().getInt("id_task");
+            title = getArguments().getString("title");
+            text = getArguments().getString("text");
+            priority = getArguments().getInt("priority");
+        }
+
+        titleTask = view.findViewById(R.id.TitleSubtask);
         descriptionTask = view.findViewById(R.id.DescriptionTask);
         updateButton = view.findViewById(R.id.UpdateButton);
         priorityButton = view.findViewById(R.id.PriorityButton);
@@ -144,7 +142,7 @@ public class UpdateTask extends BottomSheetDialogFragment {
         subtaskList.setLayoutManager(new LinearLayoutManager(getContext()));
         subtaskList.setAdapter(subtasksAdapter);
 
-        subtasksList = db.readSubtasks();
+        subtasksList = db.readSubtasks();   //create method where id
         subtasksAdapter.setSubtasks(subtasksList);
     }
 
@@ -174,5 +172,13 @@ public class UpdateTask extends BottomSheetDialogFragment {
         if (activity instanceof OnDialogCloseListener){
             ((OnDialogCloseListener)activity).onDialogClose(dialog);
         }
+    }
+
+    @Override
+    public void onDialogClose(DialogInterface dialogInterface) {
+        subtasksList = db.readSubtasks();   //create method where id
+        subtasksAdapter.setSubtasks(subtasksList);
+        subtasksAdapter.notifyDataSetChanged();
+        Toast.makeText(getContext(), "Subtasks data changed", Toast.LENGTH_LONG).show();
     }
 }

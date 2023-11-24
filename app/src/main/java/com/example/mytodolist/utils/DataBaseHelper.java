@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.mytodolist.models.SubtaskModel;
@@ -50,7 +51,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 "id_subtask INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "task_id INTEGER NOT NULL REFERENCES Tasks(id_task) ON DELETE CASCADE, " +
                 "title TEXT NOT NULL, " +
-                "text , " +
                 "is_done INTEGER NOT NULL DEFAULT 0 CHECK (is_done IN(0, 1)))";
         db.execSQL(query);
     }
@@ -89,8 +89,23 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void insertSubtask() {
+    public void insertSubtask(int taskId, String title) { this.insertSubtask(taskId, title, false); }
 
+    public void insertSubtask(int taskId, String title, boolean isDone) {
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("task_id", taskId);
+        cv.put("title", title);
+        cv.put("is_done", isDone ? 1 : 0);
+
+        long result = db.insert("Subtasks", null, cv);
+
+        if (result == -1) {
+            Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "New subtask create!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public List<TaskModel> readTasks() {
@@ -139,7 +154,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 subtask.setIdSubtask(cursor.getInt(cursor.getColumnIndexOrThrow("id_task")));
                 subtask.setTaskId(cursor.getInt(cursor.getColumnIndexOrThrow("category_id")));
                 subtask.setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
-                subtask.setText(cursor.getString(cursor.getColumnIndexOrThrow("text")));
                 subtask.setIsDone(cursor.getInt(cursor.getColumnIndexOrThrow("is_done")) > 0);
                 subtasksList.add(subtask);
             }
@@ -148,9 +162,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return subtasksList;
     }
 
-    public void updateTask(int id, String title, String text) {
-        this.updateTask(id, title, text, 3);
-    }
+    public void updateTask(int id, String title, String text) { this.updateTask(id, title, text, 3); }
 
     public void updateTask(int id, String title, String text, int priority) {
         db = this.getWritableDatabase();

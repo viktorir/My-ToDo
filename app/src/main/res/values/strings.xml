@@ -2,6 +2,7 @@
     <string name="app_name">My ToDo</string>
     <string name="tasksHeader">Tasks:</string>
     <string name="taskHint">Task</string>
+    <string name="subtaskHint">Subtask</string>
     <string name="descriptionHint">description</string>
     <string name="priorityButton">Priority</string>
     <string name="unChangeCategory">No category</string>

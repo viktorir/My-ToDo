@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +23,7 @@ import java.util.List;
 
 public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TASK_VIEW = R.layout.task_layout;
+    private static final int TASK_VIEW = R.layout.task_item_layout;
     private static final int NO_TASKS_VIEW = R.layout.no_tasks_layout;
     private List<TaskModel> tasksList;
     Context context;
