@@ -138,7 +138,6 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             priorityView = itemView.findViewById(R.id.PriorityView);
 
             if (radioButton.isSelected()) {
-                DataBaseHelper db = new DataBaseHelper(context);
                 db.deleteTask(Integer.parseInt((String)titleView.getHint()));
                 removeAt(getAdapterPosition());
             }
@@ -146,7 +145,6 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DataBaseHelper db = new DataBaseHelper(context);
                     db.deleteTask(Integer.parseInt((String)titleView.getHint()));
                     removeAt(getAdapterPosition());
                 }

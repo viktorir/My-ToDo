@@ -149,14 +149,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         List<SubtaskModel> subtasksList = new ArrayList<>();
         if (cursor == null) return subtasksList;
         if (cursor.moveToFirst()) {
-            while (cursor.moveToNext()) {
+             do {
                 SubtaskModel subtask = new SubtaskModel();
-                subtask.setIdSubtask(cursor.getInt(cursor.getColumnIndexOrThrow("id_task")));
-                subtask.setTaskId(cursor.getInt(cursor.getColumnIndexOrThrow("category_id")));
+                subtask.setIdSubtask(cursor.getInt(cursor.getColumnIndexOrThrow("task_id")));
                 subtask.setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
                 subtask.setIsDone(cursor.getInt(cursor.getColumnIndexOrThrow("is_done")) > 0);
                 subtasksList.add(subtask);
-            }
+            } while (cursor.moveToNext());
         }
         cursor.close();
         return subtasksList;
@@ -184,9 +183,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void deleteTask(int id){
+    public void deleteTask(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
+
         long result = db.delete("Tasks", "id_task=?", new String[]{String.valueOf(id)});
+
         if(result == -1){
             Toast.makeText(context, "Failed to Delete.", Toast.LENGTH_SHORT).show();
         }else{
@@ -194,7 +195,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteSubtask() {
+    public void deleteSubtask(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        long result = db.delete("Subtasks", "id_subtask=?", new String[]{String.valueOf(id)});
+
+        if(result == -1){
+            Toast.makeText(context, "Failed to Delete.", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "Successfully Deleted.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
