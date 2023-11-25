@@ -19,12 +19,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class AddNewSubtask extends BottomSheetDialogFragment {
     public static final String TAG = "AddSubtask";
-
     EditText titleSubtask;
     Button addButton;
 
-    public static AddNewSubtask newInstance() {
-        return new AddNewSubtask();
+    public static AddNewSubtask newInstance(int id) {
+        BottomSheetDialogFragment addNewSubtask = new AddNewSubtask();
+        Bundle result = new Bundle();
+        result.putInt("id_task", id);
+        addNewSubtask.setArguments(result);
+        return (AddNewSubtask)addNewSubtask;
     }
 
     @Nullable
@@ -67,7 +70,7 @@ public class AddNewSubtask extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 DataBaseHelper db = new DataBaseHelper(AddNewSubtask.this.getContext());
-                db.insertSubtask(1 ,titleSubtask.getText().toString().trim());  //add new bundle arg id_task
+                db.insertSubtask(getArguments().getInt("id_task"),titleSubtask.getText().toString().trim());  //add new bundle arg id_task
                 dismiss();
             }
         });

@@ -1,6 +1,7 @@
 package com.example.mytodolist.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mytodolist.AddNewSubtask;
 import com.example.mytodolist.R;
 import com.example.mytodolist.models.SubtaskModel;
-import com.example.mytodolist.models.TaskModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 
 import java.util.List;
@@ -28,10 +28,12 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<SubtaskModel> subtasksList;
     private Context context;
     private DataBaseHelper db;
+    private int id;
 
-    public SubtasksAdapter(Context context, DataBaseHelper db) {
+    public SubtasksAdapter(Context context, DataBaseHelper db, int id) {
         this.context = context;
         this.db = db;
+        this.id = id;
     }
 
     @NonNull
@@ -59,7 +61,7 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((AddSubtasksViewHolder)holder).addNewSubtask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AddNewSubtask.newInstance().show(((AppCompatActivity)context).getSupportFragmentManager(), AddNewSubtask.TAG);
+                    AddNewSubtask.newInstance(id).show(((AppCompatActivity)context).getSupportFragmentManager(), AddNewSubtask.TAG);
                 }
             });
         }

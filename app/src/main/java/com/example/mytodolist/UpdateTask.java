@@ -137,12 +137,12 @@ public class UpdateTask extends BottomSheetDialogFragment implements OnDialogClo
 
         db = new DataBaseHelper(getActivity());
         subtasksList = new ArrayList<>();
-        subtasksAdapter = new SubtasksAdapter(getActivity(), db);
+        subtasksAdapter = new SubtasksAdapter(getActivity(), db, id);
 
         subtaskList.setLayoutManager(new LinearLayoutManager(getContext()));
         subtaskList.setAdapter(subtasksAdapter);
 
-        subtasksList = db.readSubtasks();   //create method where id
+        subtasksList = db.readSubtasks(id);
         subtasksAdapter.setSubtasks(subtasksList);
     }
 
@@ -176,7 +176,7 @@ public class UpdateTask extends BottomSheetDialogFragment implements OnDialogClo
 
     @Override
     public void onDialogClose(DialogInterface dialogInterface) {
-        subtasksList = db.readSubtasks();   //create method where id
+        subtasksList = db.readSubtasks(id);
         subtasksAdapter.setSubtasks(subtasksList);
         subtasksAdapter.notifyDataSetChanged();
         Toast.makeText(getContext(), "Subtasks data changed", Toast.LENGTH_LONG).show();

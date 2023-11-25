@@ -151,7 +151,31 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
              do {
                 SubtaskModel subtask = new SubtaskModel();
-                subtask.setIdSubtask(cursor.getInt(cursor.getColumnIndexOrThrow("task_id")));
+                subtask.setIdSubtask(cursor.getInt(cursor.getColumnIndexOrThrow("id_subtask")));
+                subtask.setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
+                subtask.setIsDone(cursor.getInt(cursor.getColumnIndexOrThrow("is_done")) > 0);
+                subtasksList.add(subtask);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return subtasksList;
+    }
+
+    public List<SubtaskModel> readSubtasks(int id) {
+        String query = "SELECT * FROM Subtasks WHERE task_id = " + id;
+        db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+
+        List<SubtaskModel> subtasksList = new ArrayList<>();
+        if (cursor == null) return subtasksList;
+        if (cursor.moveToFirst()) {
+            do {
+                SubtaskModel subtask = new SubtaskModel();
+                subtask.setIdSubtask(cursor.getInt(cursor.getColumnIndexOrThrow("id_subtask")));
                 subtask.setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
                 subtask.setIsDone(cursor.getInt(cursor.getColumnIndexOrThrow("is_done")) > 0);
                 subtasksList.add(subtask);
@@ -185,6 +209,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public void deleteTask(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("PRAGMA foreign_keys=ON");
 
         long result = db.delete("Tasks", "id_task=?", new String[]{String.valueOf(id)});
 
@@ -197,6 +222,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public void deleteSubtask(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("PRAGMA foreign_keys=ON");
 
         long result = db.delete("Subtasks", "id_subtask=?", new String[]{String.valueOf(id)});
 
