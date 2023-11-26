@@ -18,19 +18,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DataBaseHelper extends SQLiteOpenHelper {
-
+public class DataBaseHelper extends SQLiteOpenHelper
+{
     private SQLiteDatabase db;
     private Context context;
     private static final String DATABASE_NAME = "db_todoapp";
 
-    public DataBaseHelper(@Nullable Context context) {
+    public DataBaseHelper(@Nullable Context context)
+    {
         super(context, DATABASE_NAME, null, 3);
         this.context = context;
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase db)
+    {
         String query =  "CREATE TABLE IF NOT EXISTS Categories(" +
                         "id_category INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                         "name TEXT NOT NULL UNIQUE, " +
@@ -73,7 +75,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void insertTask(String title, String text, int priority)
     { this.insertTask(0, title, text, new Date(), false, priority); }
 
-    public void insertTask(int categoryId, String title, String text, Date deadline , boolean isDone, int priority) {
+    public void insertTask(int categoryId, String title, String text, Date deadline , boolean isDone, int priority)
+    {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
