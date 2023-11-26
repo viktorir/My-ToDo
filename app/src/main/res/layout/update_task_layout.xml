@@ -18,32 +18,37 @@
             android:id="@+id/TitleSubtask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:autofillHints="@string/taskHint"
             android:ems="10"
             android:hint="@string/taskHint"
             android:inputType="text"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:textColorHint="@color/hint" />
 
         <EditText
             android:id="@+id/DescriptionTask"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:autofillHints="@string/descriptionHint"
             android:ems="10"
             android:hint="@string/descriptionHint"
             android:inputType="text"
+            android:minWidth="256dp"
             android:minHeight="48dp"
+            android:textColorHint="@color/hint"
             android:textSize="14sp" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="4dp">
+            android:layout_marginBottom="4dp"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -55,9 +60,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/priority_3"
+                    android:backgroundTint="@color/blue_dark"
                     android:text="@string/priorityButton"
-                    android:textColor="?android:textColorPrimary" />
+                    android:textColor="@color/white"
+                    app:icon="@drawable/priority_3"
+                    app:iconGravity="start"
+                    app:iconTint="#FFFFFF"/>
 
                 <Space
                     android:layout_width="16dp"
@@ -69,9 +77,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/category_icon"
+                    android:backgroundTint="@color/blue_dark"
                     android:text="@string/unChangeCategory"
-                    android:textColor="?android:textColorPrimary" />
+                    android:textColor="@color/white"
+                    app:icon="@drawable/category_icon"
+                    app:iconGravity="start"
+                    app:iconTint="#FFFFFF"/>
 
                 <Space
                     android:layout_width="16dp"
@@ -83,8 +94,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/blue_dark"
                     android:text="@string/unChangeDeadline"
-                    android:textColor="?android:textColorPrimary" />
+                    android:textColor="@color/white"
+                    />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/blue_dark"
+                    android:text="@color/blue_dark" />
             </LinearLayout>
         </HorizontalScrollView>
 
@@ -95,8 +116,9 @@
             android:layout_gravity="end"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
+            android:backgroundTint="@color/blue_dark"
             android:text="@string/updateButton"
-            android:textColor="?android:textColorPrimary" />
+            android:textColor="@color/white" />
 
         <ProgressBar
             android:id="@+id/progressBar"

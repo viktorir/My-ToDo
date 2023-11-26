@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.Locale;
+
 public class AddNewSubtask extends BottomSheetDialogFragment {
     public static final String TAG = "AddSubtask";
     EditText titleSubtask;

@@ -48,7 +48,7 @@
                 android:layout_marginEnd="14dp"
                 android:layout_weight="1"
 
-                android:contentDescription="priority"
+                android:contentDescription="@string/priority_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
-                android:contentDescription="category_icon"
+                android:contentDescription="@string/category_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasksHeader">Задачи:</string>
+    <string name="taskHint">Задача</string>
+    <string name="subtaskHint">Подзадача</string>
+    <string name="descriptionHint">Описание</string>
+    <string name="priorityButton">Приоритет</string>
+    <string name="unChangeCategory">Без категории</string>
+    <string name="unChangeDeadline">Сегодня</string>
+    <string name="addButton">Добавить</string>
+    <string name="updateButton">Изменить</string>
+    <string name="current_locale">ru</string>
+    <string name="main_settings_menu_description">main settings menu</string>
+    <string name="add_subtasks_button">Добавить подзадачу</string>
+    <string name="no_tasks_description">Но вы всегда можете их найти!</string>
+    <string name="no_tasks_header">Cейчас у вас нет задач:(</string>
+</resources>

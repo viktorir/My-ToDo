@@ -18,6 +18,8 @@ import androidx.fragment.app.FragmentResultListener;
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.Locale;
+
 public class AddNewTask extends BottomSheetDialogFragment {
     public static final String TAG = "AddTask";
 

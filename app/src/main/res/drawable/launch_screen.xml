@@ -5,6 +5,6 @@
     android:viewportHeight="640">
   <path
       android:pathData="M0,0h360v640h-360z"
-      android:fillColor="@color/blue_dark"/>
+      android:fillColor="@color/launch_background"/>
 
 </vector>

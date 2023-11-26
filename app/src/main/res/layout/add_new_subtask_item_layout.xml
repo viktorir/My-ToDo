@@ -7,25 +7,15 @@
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="5dp">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_gravity="center_vertical"
+        android:drawablePadding="16dp"
+        android:paddingVertical="8dp"
+        android:text="@string/add_subtasks_button"
+        android:textSize="20sp"
+        app:drawableStartCompat="@android:drawable/ic_input_add" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="4sp"
-            app:srcCompat="@android:drawable/ic_input_add" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="Add Subtasks"
-            android:textSize="20sp" />
-    </LinearLayout>
 </androidx.cardview.widget.CardView>

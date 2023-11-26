@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.Locale;
+
 public class ChangePriority extends BottomSheetDialogFragment {
     public static final String TAG = "ChangePriority";
 

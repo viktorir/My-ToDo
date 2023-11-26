@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="almost_black">#131313</color>
+    <color name="hint">#424242</color>
     <color name="white">#FFFFFFFF</color>
+
     <color name="blue_light">#66b5ff</color>
     <color name="blue">#0085ff</color>
-    <color name="blue_dark">#032040</color>
+    <color name="blue_dark">#004280</color>
+    <color name="launch_background">#003566</color>
 </resources>

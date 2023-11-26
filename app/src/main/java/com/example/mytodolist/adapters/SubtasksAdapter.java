@@ -1,5 +1,6 @@
 package com.example.mytodolist.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,11 +16,13 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytodolist.AddNewSubtask;
+import com.example.mytodolist.MainActivity;
 import com.example.mytodolist.R;
 import com.example.mytodolist.models.SubtaskModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 
 import java.util.List;
+import java.util.Locale;
 
 public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int SUBTASK_VIEW = R.layout.subtask_item_layout;

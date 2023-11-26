@@ -2,20 +2,29 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Item" />
+        android:title="Category? 🤨" />
     <item
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Item" >
+        android:title="Sort by:">
         <menu
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
             <item
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:title="Item" />
+                android:title="No sorted" />
+            <item
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:title="Priority" />
+            <item
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:title="Category" />
         </menu>
     </item>
 </menu>

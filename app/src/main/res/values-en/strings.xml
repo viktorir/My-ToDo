@@ -1,20 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">My ToDo</string>
     <string name="tasksHeader">Tasks:</string>
-    <string name="taskHint">Task</string>
-    <string name="subtaskHint">Subtask</string>
-    <string name="descriptionHint">description</string>
     <string name="priorityButton">Priority</string>
     <string name="unChangeCategory">No category</string>
     <string name="unChangeDeadline">Today</string>
     <string name="addButton">Add</string>
     <string name="updateButton">Update</string>
-    <string name="current_locale">default</string>
+    <string name="taskHint">Task</string>
+    <string name="subtaskHint">Subtask</string>
+    <string name="descriptionHint">description</string>
+    <string name="current_locale">en</string>
     <string name="main_settings_menu_description">main settings menu</string>
     <string name="add_subtasks_button">Add Subtasks</string>
     <string name="no_tasks_description">But you can always find them!</string>
-    <string name="no_tasks_icon_description" translatable="false">no_tasks_icon</string>
     <string name="no_tasks_header">You have no tasks right now :(</string>
-    <string name="category_icon" translatable="false">category_icon</string>
-    <string name="priority_icon" translatable="false">priority_icon</string>
 </resources>
