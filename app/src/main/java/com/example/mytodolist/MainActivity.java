@@ -6,7 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.mytodolist.adapters.TasksAdapter;
@@ -17,11 +22,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnDialogCloseListener {
+public class MainActivity extends AppCompatActivity implements OnDialogCloseListener, PopupMenu.OnMenuItemClickListener {
 
     TextView header;
     RecyclerView taskList;
     FloatingActionButton createTask;
+    ImageView settingsMenuButton;
     TasksAdapter tasksAdapter;
     DataBaseHelper db;
     List<TaskModel> tasksList;
@@ -35,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
         header = findViewById(R.id.Header);
         taskList = findViewById(R.id.TasksList);
         createTask = findViewById(R.id.CreateTaskButton);
+        settingsMenuButton = findViewById(R.id.settingsMenuButton);
 
         db = new DataBaseHelper(MainActivity.this);
         tasksList = new ArrayList<>();
@@ -52,6 +59,27 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
                 AddNewTask.newInstance().show(getSupportFragmentManager(), AddNewTask.TAG);
             }
         });
+
+        settingsMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMainPopupMenu(v);
+            }
+        });
+    }
+
+    public void showMainPopupMenu(View v) {
+        PopupMenu popup = new PopupMenu(this, v, Gravity.END);
+        popup.setOnMenuItemClickListener(this);
+        popup.getMenuInflater().inflate(R.menu.main_setting_menu, popup.getMenu());
+        popup.show();
+    }
+
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            default:
+                return false;
+        }
     }
 
     public void onDialogClose (DialogInterface dialogInterface) {

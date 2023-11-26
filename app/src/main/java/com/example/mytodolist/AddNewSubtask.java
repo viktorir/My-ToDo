@@ -70,7 +70,7 @@ public class AddNewSubtask extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 DataBaseHelper db = new DataBaseHelper(AddNewSubtask.this.getContext());
-                db.insertSubtask(getArguments().getInt("id_task"),titleSubtask.getText().toString().trim());  //add new bundle arg id_task
+                db.insertSubtask(getArguments().getInt("id_task"), titleSubtask.getText().toString().trim());
                 dismiss();
             }
         });

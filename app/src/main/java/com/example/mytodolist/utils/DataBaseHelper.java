@@ -32,13 +32,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query =  "CREATE TABLE IF NOT EXISTS Categories(" +
-                        "id_category INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                        "id_category INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                         "name TEXT NOT NULL UNIQUE, " +
                         "color TEXT NOT NULL DEFAULT \"#FFFFFF\")";
         db.execSQL(query);
 
         query = "CREATE TABLE IF NOT EXISTS Tasks(" +
-                "id_task INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "id_task INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                 "category_id INTEGER REFERENCES Categories(id_category) ON DELETE CASCADE, " +
                 "title TEXT NOT NULL, " +
                 "text TEXT, " +
@@ -48,7 +48,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(query);
 
         query = "CREATE TABLE IF NOT EXISTS Subtasks(" +
-                "id_subtask INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "id_subtask INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                 "task_id INTEGER NOT NULL REFERENCES Tasks(id_task) ON DELETE CASCADE, " +
                 "title TEXT NOT NULL, " +
                 "is_done INTEGER NOT NULL DEFAULT 0 CHECK (is_done IN(0, 1)))";
@@ -56,18 +56,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    {
         db.execSQL("DROP TABLE IF EXISTS Subtasks");
         db.execSQL("DROP TABLE IF EXISTS Tasks");
         db.execSQL("DROP TABLE IF EXISTS Categories");
         onCreate(db);
     }
 
-    public void insertTask(String title) { this.insertTask(0, title, null, new Date(), false, 3); }
+    public void insertTask(String title)
+    { this.insertTask(0, title, null, new Date(), false, 3); }
 
-    public void insertTask(String title, String text) { this.insertTask(0, title, text, new Date(), false, 3); }
+    public void insertTask(String title, String text)
+    { this.insertTask(0, title, text, new Date(), false, 3); }
 
-    public void insertTask(String title, String text, int priority) { this.insertTask(0, title, text, new Date(), false, priority); }
+    public void insertTask(String title, String text, int priority)
+    { this.insertTask(0, title, text, new Date(), false, priority); }
 
     public void insertTask(int categoryId, String title, String text, Date deadline , boolean isDone, int priority) {
         db = this.getWritableDatabase();
@@ -89,9 +93,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void insertSubtask(int taskId, String title) { this.insertSubtask(taskId, title, false); }
+    public void insertSubtask(int taskId, String title)
+    { this.insertSubtask(taskId, title, false); }
 
-    public void insertSubtask(int taskId, String title, boolean isDone) {
+    public void insertSubtask(int taskId, String title, boolean isDone)
+    {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -106,9 +112,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } else {
             Toast.makeText(context, "New subtask create!", Toast.LENGTH_SHORT).show();
         }
+
+        db.close();
     }
 
-    public List<TaskModel> readTasks() {
+    public List<TaskModel> readTasks()
+    {
         String query = "SELECT * FROM Tasks LEFT JOIN Categories on category_id = id_category";
         db = this.getReadableDatabase();
 
@@ -133,11 +142,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 tasksList.add(task);
             } while (cursor.moveToNext());
         }
+
         cursor.close();
+        db.close();
         return tasksList;
     }
 
-    public List<SubtaskModel> readSubtasks() {
+    public List<SubtaskModel> readSubtasks()
+    {
         String query = "SELECT * FROM Subtasks";
         db = this.getReadableDatabase();
 
@@ -157,11 +169,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 subtasksList.add(subtask);
             } while (cursor.moveToNext());
         }
+
         cursor.close();
+        db.close();
         return subtasksList;
     }
 
-    public List<SubtaskModel> readSubtasks(int id) {
+    public List<SubtaskModel> readSubtasks(int id)
+    {
         String query = "SELECT * FROM Subtasks WHERE task_id = " + id;
         db = this.getReadableDatabase();
 
@@ -181,13 +196,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 subtasksList.add(subtask);
             } while (cursor.moveToNext());
         }
+
         cursor.close();
+        db.close();
         return subtasksList;
     }
 
-    public void updateTask(int id, String title, String text) { this.updateTask(id, title, text, 3); }
+    public void updateTask(int id, String title, String text)
+    { this.updateTask(id, title, text, 3); }
 
-    public void updateTask(int id, String title, String text, int priority) {
+    public void updateTask(int id, String title, String text, int priority)
+    {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -201,14 +220,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }else {
             Toast.makeText(context, "Updated Successfully!", Toast.LENGTH_SHORT).show();
         }
+
+        db.close();
     }
 
-    public void updateSubtask() {
+    public void updateSubtask()
+    {
 
     }
 
-    public void deleteTask(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public void deleteTask(int id)
+    {
+        db = this.getWritableDatabase();
         db.execSQL("PRAGMA foreign_keys=ON");
 
         long result = db.delete("Tasks", "id_task=?", new String[]{String.valueOf(id)});
@@ -218,10 +241,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }else{
             Toast.makeText(context, "Successfully Deleted.", Toast.LENGTH_SHORT).show();
         }
+
+        db.close();
     }
 
-    public void deleteSubtask(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public void deleteSubtask(int id)
+    {
+        db = this.getWritableDatabase();
         db.execSQL("PRAGMA foreign_keys=ON");
 
         long result = db.delete("Subtasks", "id_subtask=?", new String[]{String.valueOf(id)});
@@ -231,5 +257,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }else{
             Toast.makeText(context, "Successfully Deleted.", Toast.LENGTH_SHORT).show();
         }
+
+        db.close();
     }
 }
