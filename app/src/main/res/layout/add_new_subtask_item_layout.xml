@@ -12,10 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:drawablePadding="16dp"
+        android:drawablePadding="22dp"
+        android:paddingHorizontal="6dp"
         android:paddingVertical="8dp"
         android:text="@string/add_subtasks_button"
         android:textSize="20sp"
-        app:drawableStartCompat="@android:drawable/ic_input_add" />
+        app:drawableStartCompat="@drawable/plus_subtask" />
 
 </androidx.cardview.widget.CardView>

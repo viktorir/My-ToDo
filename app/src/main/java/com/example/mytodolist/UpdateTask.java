@@ -2,6 +2,7 @@ package com.example.mytodolist;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +23,7 @@ import com.example.mytodolist.adapters.SubtasksAdapter;
 import com.example.mytodolist.models.SubtaskModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,7 @@ public class UpdateTask extends BottomSheetDialogFragment implements OnDialogClo
 
     EditText titleTask;
     EditText descriptionTask;
-    Button updateButton, priorityButton;
+    MaterialButton updateButton, priorityButton;
     RecyclerView subtaskList;
     SubtasksAdapter subtasksAdapter;
     DataBaseHelper db;
@@ -149,21 +151,23 @@ public class UpdateTask extends BottomSheetDialogFragment implements OnDialogClo
     private void setPriorityButtonIcon(int id) {
         switch (id) {
             case 1:
-                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_1, 0, 0, 0);
+                priorityButton.setIcon(getContext().getDrawable(R.drawable.priority_1));
                 break;
             case 2:
-                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_2, 0, 0, 0);
+                priorityButton.setIcon(getContext().getDrawable(R.drawable.priority_2));
                 break;
             case 3:
-                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_3, 0, 0, 0);
+                priorityButton.setIcon(getContext().getDrawable(R.drawable.priority_3));
                 break;
             case 4:
-                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_4, 0, 0, 0);
+                priorityButton.setIcon(getContext().getDrawable(R.drawable.priority_4));
                 break;
             case 5:
-                priorityButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.priority_5, 0, 0, 0);
+                priorityButton.setIcon(getContext().getDrawable(R.drawable.priority_5));
                 break;
         }
+        if (id == 3) priorityButton.setIconTint(ColorStateList.valueOf(getContext().getColor(R.color.white)));
+        else priorityButton.setIconTint(null);
     }
 
     public void onDismiss(@NonNull DialogInterface dialog) {
