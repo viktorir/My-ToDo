@@ -82,7 +82,6 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        //Toast.makeText(context, "Subtask item: " + String.valueOf(subtasksList.size()), Toast.LENGTH_LONG).show();
         if (subtasksList.size() == 0) return 1;
         return subtasksList.size() + 1;
     }
