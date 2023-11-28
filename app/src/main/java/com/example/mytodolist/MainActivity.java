@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -15,9 +16,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mytodolist.adapters.TasksAdapter;
+import com.example.mytodolist.fragments.AddNewTask;
 import com.example.mytodolist.models.TaskModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -83,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.category:
-                Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, CategoryChangeActivity.class);
+                startActivity(intent);
+                //Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
 
             default:

@@ -33,7 +33,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String query =  "CREATE TABLE IF NOT EXISTS Categories(" +
                         "id_category INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT, " +
                         "name TEXT NOT NULL UNIQUE, " +
-                        "color TEXT NOT NULL DEFAULT \"#FFFFFF\")";
+                        "color TEXT NOT NULL DEFAULT \"#000000\")";
         db.execSQL(query);
 
         query = "CREATE TABLE IF NOT EXISTS Tasks(" +
@@ -70,8 +70,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void insertTask(String title, String text, int priority)
     { this.insertTask(0, title, text, new Date(), false, priority); }
 
-    public void insertTask(int categoryId, String title, String text, Date deadline , boolean isDone, int priority)
-    {
+    public void insertTask(int categoryId, String title, String text, Date deadline , boolean isDone, int priority) {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -215,8 +214,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateSubtask() {
+    public void updateSubtask(int id, String title) {
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
 
+        cv.put("title", title);
+
+        long result = db.update("Subtasks", cv, "id_subtask=?", new String[]{String.valueOf(id)});
+        if(result == -1){
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(context, "Updated Successfully!", Toast.LENGTH_SHORT).show();
+        }
+
+        db.close();
     }
 
     public void deleteTask(int id) {

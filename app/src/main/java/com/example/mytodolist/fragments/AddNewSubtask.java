@@ -1,4 +1,4 @@
-package com.example.mytodolist;
+package com.example.mytodolist.fragments;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -14,10 +14,10 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.mytodolist.OnDialogCloseListener;
+import com.example.mytodolist.R;
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import java.util.Locale;
 
 public class AddNewSubtask extends BottomSheetDialogFragment {
     public static final String TAG = "AddSubtask";
@@ -35,7 +35,7 @@ public class AddNewSubtask extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.add_new_subtask_layout, container, false);
+        return inflater.inflate(R.layout.fragment_add_new_subtask, container, false);
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

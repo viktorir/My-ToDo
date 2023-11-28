@@ -12,28 +12,19 @@ public class TaskModel {
         return title;
     }
 
-    public void setTitle(String title) {
-        if (title != null && !title.trim().equals(""))
-            this.title = title;
-    }
+    public void setTitle(String title) { this.title = title; }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        if (text.trim().equals("")) text = null;
-        this.text = text;
-    }
+    public void setText(String text) { this.text = text; }
 
     public int getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
-        if (priority > 0 && priority < 6)
-            this.priority = priority;
-    }
+    public void setPriority(int priority) { this.priority = priority; }
 
     public String getDeadline() {
         return deadline;

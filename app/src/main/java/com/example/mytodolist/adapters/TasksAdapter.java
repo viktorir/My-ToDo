@@ -1,7 +1,6 @@
 package com.example.mytodolist.adapters;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,19 +14,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mytodolist.MainActivity;
 import com.example.mytodolist.R;
-import com.example.mytodolist.UpdateTask;
+import com.example.mytodolist.fragments.UpdateTask;
 import com.example.mytodolist.models.TaskModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 
 import java.util.List;
-import java.util.Locale;
 
 public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TASK_VIEW = R.layout.task_item_layout;
-    private static final int NO_TASKS_VIEW = R.layout.no_tasks_layout;
+    private static final int TASK_VIEW = R.layout.item_task;
+    private static final int NO_TASKS_VIEW = R.layout.item_no_tasks;
     private List<TaskModel> tasksList;
     Context context;
     DataBaseHelper db;

@@ -1,32 +1,30 @@
 package com.example.mytodolist.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mytodolist.AddNewSubtask;
-import com.example.mytodolist.MainActivity;
+import com.example.mytodolist.fragments.AddNewSubtask;
 import com.example.mytodolist.R;
+import com.example.mytodolist.fragments.UpdateSubtask;
+import com.example.mytodolist.fragments.UpdateTask;
 import com.example.mytodolist.models.SubtaskModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 
 import java.util.List;
-import java.util.Locale;
 
 public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int SUBTASK_VIEW = R.layout.subtask_item_layout;
-    private static final int ADD_SUBTASKS_VIEW = R.layout.add_new_subtask_item_layout;
+    private static final int SUBTASK_VIEW = R.layout.item_subtask;
+    private static final int ADD_SUBTASKS_VIEW = R.layout.item_add_new_subtask;
 
     private List<SubtaskModel> subtasksList;
     private Context context;
@@ -58,6 +56,13 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             ((SubtasksAdapter.SubtaskViewHolder)holder).titleView.setText(subtask.getTitle());
             ((SubtasksAdapter.SubtaskViewHolder)holder).titleView.setHint(String.valueOf(subtask.getIdSubtask()));
+            ((SubtasksAdapter.SubtaskViewHolder)holder).titleView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+                    UpdateSubtask.newInstance(subtask.getIdSubtask(), subtask.getTitle()).show(manager, UpdateSubtask.TAG);
+                }
+            });
         }
 
         if (holder instanceof AddSubtasksViewHolder) {
