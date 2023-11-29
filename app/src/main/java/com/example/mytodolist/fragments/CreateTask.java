@@ -21,14 +21,14 @@ import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 
-public class AddNewTask extends BottomSheetDialogFragment {
+public class CreateTask extends BottomSheetDialogFragment {
     public static final String TAG = "AddTask";
 
     EditText titleTask, descriptionTask;
     MaterialButton addButton, priorityButton;
 
-    public static AddNewTask newInstance() {
-        return new AddNewTask();
+    public static CreateTask newInstance() {
+        return new CreateTask();
     }
 
     @Nullable
@@ -87,7 +87,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataBaseHelper db = new DataBaseHelper(AddNewTask.this.getContext());
+                DataBaseHelper db = new DataBaseHelper(CreateTask.this.getContext());
                 db.insertTask(titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt((String)priorityButton.getHint()));
                 dismiss();
             }

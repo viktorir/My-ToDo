@@ -13,10 +13,9 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mytodolist.fragments.AddNewSubtask;
+import com.example.mytodolist.fragments.CreateSubtask;
 import com.example.mytodolist.R;
 import com.example.mytodolist.fragments.UpdateSubtask;
-import com.example.mytodolist.fragments.UpdateTask;
 import com.example.mytodolist.models.SubtaskModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 
@@ -43,8 +42,8 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         View view = LayoutInflater.from(context).inflate(viewType, parent, false);
         RecyclerView.ViewHolder viewHolder = null;
 
-        if (viewType == SUBTASK_VIEW) viewHolder = new SubtasksAdapter.SubtaskViewHolder(view);
-        if (viewType == ADD_SUBTASKS_VIEW) viewHolder = new SubtasksAdapter.AddSubtasksViewHolder(view);
+        if (viewType == SUBTASK_VIEW) viewHolder = new SubtaskViewHolder(view);
+        if (viewType == ADD_SUBTASKS_VIEW) viewHolder = new AddSubtasksViewHolder(view);
 
         return viewHolder;
     }
@@ -55,12 +54,21 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final SubtaskModel subtask = subtasksList.get(position);
 
             ((SubtasksAdapter.SubtaskViewHolder)holder).titleView.setText(subtask.getTitle());
-            ((SubtasksAdapter.SubtaskViewHolder)holder).titleView.setHint(String.valueOf(subtask.getIdSubtask()));
             ((SubtasksAdapter.SubtaskViewHolder)holder).titleView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
                     UpdateSubtask.newInstance(subtask.getIdSubtask(), subtask.getTitle()).show(manager, UpdateSubtask.TAG);
+                }
+            });
+            if (((SubtaskViewHolder)holder).radioButton.isChecked()) {
+                ((SubtaskViewHolder)holder).radioButton.setChecked(false);
+            }
+            ((SubtaskViewHolder)holder).radioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    db.deleteSubtask(subtask.getIdSubtask());
+                    removeAt(holder.getAdapterPosition());
                 }
             });
         }
@@ -69,7 +77,7 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((AddSubtasksViewHolder)holder).addNewSubtask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AddNewSubtask.newInstance(id).show(((AppCompatActivity)context).getSupportFragmentManager(), AddNewSubtask.TAG);
+                    CreateSubtask.newInstance(id).show(((AppCompatActivity)context).getSupportFragmentManager(), CreateSubtask.TAG);
                 }
             });
         }
@@ -97,7 +105,7 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyItemRangeChanged(pos, subtasksList.size());
     }
 
-    public class SubtaskViewHolder extends RecyclerView.ViewHolder {
+    public static class SubtaskViewHolder extends RecyclerView.ViewHolder {
         RadioButton radioButton;
         TextView titleView;
         public SubtaskViewHolder(View itemView) {
@@ -105,23 +113,10 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             titleView = itemView.findViewById(R.id.TitleView);
             radioButton = itemView.findViewById(R.id.RadioButton);
-
-            if (radioButton.isSelected()) {
-                db.deleteSubtask(Integer.parseInt((String)titleView.getHint()));
-                removeAt(getAdapterPosition());
-            }
-
-            radioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    db.deleteSubtask(Integer.parseInt((String)titleView.getHint()));
-                    removeAt(getAdapterPosition());
-                }
-            });
         }
     }
 
-    public class AddSubtasksViewHolder extends RecyclerView.ViewHolder {
+    public static class AddSubtasksViewHolder extends RecyclerView.ViewHolder {
         CardView addNewSubtask;
         public AddSubtasksViewHolder(View itemView) {
             super(itemView);

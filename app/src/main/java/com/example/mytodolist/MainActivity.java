@@ -18,7 +18,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.mytodolist.adapters.TasksAdapter;
-import com.example.mytodolist.fragments.AddNewTask;
+import com.example.mytodolist.fragments.CreateTask;
 import com.example.mytodolist.models.TaskModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
         createTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddNewTask.newInstance().show(getSupportFragmentManager(), AddNewTask.TAG);
+                CreateTask.newInstance().show(getSupportFragmentManager(), CreateTask.TAG);
             }
         });
 
@@ -84,9 +84,8 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.category:
-                Intent intent = new Intent(this, CategoryChangeActivity.class);
+                Intent intent = new Intent(this, CategoryManagerActivity.class);
                 startActivity(intent);
-                //Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
 
             default:

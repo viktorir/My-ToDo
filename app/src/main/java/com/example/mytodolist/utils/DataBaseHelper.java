@@ -5,11 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.mytodolist.R;
+import com.example.mytodolist.models.CategoryModel;
 import com.example.mytodolist.models.SubtaskModel;
 import com.example.mytodolist.models.TaskModel;
 
@@ -53,6 +56,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 "is_done INTEGER NOT NULL DEFAULT 0 CHECK (is_done IN(0, 1)))";
         db.execSQL(query);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -106,6 +110,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "New subtask create!", Toast.LENGTH_SHORT).show();
+        }
+
+        db.close();
+    }
+
+    public void insertCategory( String name)
+    { this.insertCategory(name, Color.valueOf(Color.BLACK)); }
+
+    public void insertCategory(String name, Color color)  {
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("name", name);
+        cv.put("color", String.format("#%06X", (0xFFFFFF & color.toArgb())));
+
+        long result = db.insert("Categories", null, cv);
+
+        if (result == -1) {
+            Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "New category create!", Toast.LENGTH_SHORT).show();
         }
 
         db.close();
@@ -168,8 +193,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return subtasksList;
     }
 
-    public List<SubtaskModel> readSubtasks(int id) {
-        String query = "SELECT * FROM Subtasks WHERE task_id = " + id;
+    public List<SubtaskModel> readSubtasks(int idTask) {
+        String query = "SELECT * FROM Subtasks WHERE task_id = " + idTask;
         db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -193,6 +218,33 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
         return subtasksList;
     }
+
+    public List<CategoryModel> readCategories() {
+        String query = "SELECT * FROM Categories";
+        db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+
+        List<CategoryModel> categoriesList = new ArrayList<>();
+        if (cursor == null) return categoriesList;
+        if (cursor.moveToFirst()) {
+            do {
+                CategoryModel category = new CategoryModel();
+                category.setIdCategory(cursor.getInt(cursor.getColumnIndexOrThrow("id_category")));
+                category.setName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+                category.setColor(cursor.getString(cursor.getColumnIndexOrThrow("color")));
+                categoriesList.add(category);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return categoriesList;
+    }
+
 
     public void updateTask(int id, String title, String text) { this.updateTask(id, title, text, 3); }
 
@@ -230,6 +282,23 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateCategory(int id, String name, Color color) {
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("name", name);
+        cv.put("color", String.format("#%06X", (0xFFFFFF & color.toArgb())));
+
+        long result = db.update("Categories", cv, "id_category=?", new String[]{String.valueOf(id)});
+        if(result == -1){
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(context, "Updated Successfully!", Toast.LENGTH_SHORT).show();
+        }
+
+        db.close();
+    }
+
     public void deleteTask(int id) {
         db = this.getWritableDatabase();
         db.execSQL("PRAGMA foreign_keys=ON");
@@ -250,6 +319,21 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("PRAGMA foreign_keys=ON");
 
         long result = db.delete("Subtasks", "id_subtask=?", new String[]{String.valueOf(id)});
+
+        if(result == -1){
+            Toast.makeText(context, "Failed to Delete.", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "Successfully Deleted.", Toast.LENGTH_SHORT).show();
+        }
+
+        db.close();
+    }
+
+    public void deleteCategory(int id) {
+        db = this.getWritableDatabase();
+        db.execSQL("PRAGMA foreign_keys=ON");
+
+        long result = db.delete("Categories", "id_category=?", new String[]{String.valueOf(id)});
 
         if(result == -1){
             Toast.makeText(context, "Failed to Delete.", Toast.LENGTH_SHORT).show();

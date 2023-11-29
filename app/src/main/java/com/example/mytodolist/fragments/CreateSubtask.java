@@ -1,6 +1,7 @@
 package com.example.mytodolist.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,23 +14,25 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.mytodolist.OnDialogCloseListener;
 import com.example.mytodolist.R;
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class AddNewSubtask extends BottomSheetDialogFragment {
+public class CreateSubtask extends BottomSheetDialogFragment {
     public static final String TAG = "AddSubtask";
     EditText titleSubtask;
     Button addButton;
 
-    public static AddNewSubtask newInstance(int id) {
-        BottomSheetDialogFragment addNewSubtask = new AddNewSubtask();
+    public static CreateSubtask newInstance(int id) {
+        BottomSheetDialogFragment addNewSubtask = new CreateSubtask();
         Bundle result = new Bundle();
         result.putInt("id_task", id);
         addNewSubtask.setArguments(result);
-        return (AddNewSubtask)addNewSubtask;
+        return (CreateSubtask)addNewSubtask;
     }
 
     @Nullable
@@ -71,7 +74,7 @@ public class AddNewSubtask extends BottomSheetDialogFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataBaseHelper db = new DataBaseHelper(AddNewSubtask.this.getContext());
+                DataBaseHelper db = new DataBaseHelper(CreateSubtask.this.getContext());
                 db.insertSubtask(getArguments().getInt("id_task"), titleSubtask.getText().toString().trim());
                 dismiss();
             }
@@ -80,9 +83,9 @@ public class AddNewSubtask extends BottomSheetDialogFragment {
 
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        Activity activity = getActivity();
-        if (activity instanceof OnDialogCloseListener){
-            ((OnDialogCloseListener)activity).onDialogClose(dialog);
+        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(UpdateTask.TAG);
+        if (fragment instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener)fragment).onDismiss(dialog);
         }
     }
 }

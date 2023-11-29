@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +29,7 @@ import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateTask extends BottomSheetDialogFragment {
+public class UpdateTask extends BottomSheetDialogFragment implements DialogInterface.OnDismissListener {
     public static final String TAG = "UpdateTask";
 
     EditText titleTask;
@@ -171,7 +172,9 @@ public class UpdateTask extends BottomSheetDialogFragment {
     }
 
     public void onDismiss(@NonNull DialogInterface dialog) {
-        super.onDismiss(dialog);
+        subtasksList = db.readSubtasks(id);
+        subtasksAdapter.setSubtasks(subtasksList);
+        subtasksAdapter.notifyDataSetChanged();
         Activity activity = getActivity();
         if (activity instanceof OnDialogCloseListener){
             ((OnDialogCloseListener)activity).onDialogClose(dialog);
