@@ -26,9 +26,9 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int ADD_SUBTASKS_VIEW = R.layout.item_add_new_subtask;
 
     private List<SubtaskModel> subtasksList;
-    private Context context;
-    private DataBaseHelper db;
-    private int id;
+    Context context;
+    DataBaseHelper db;
+    int id;
 
     public SubtasksAdapter(Context context, DataBaseHelper db, int id) {
         this.context = context;
@@ -43,7 +43,7 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RecyclerView.ViewHolder viewHolder = null;
 
         if (viewType == SUBTASK_VIEW) viewHolder = new SubtaskViewHolder(view);
-        if (viewType == ADD_SUBTASKS_VIEW) viewHolder = new AddSubtasksViewHolder(view);
+        if (viewType == ADD_SUBTASKS_VIEW || viewHolder == null) viewHolder = new AddSubtasksViewHolder(view);
 
         return viewHolder;
     }
@@ -51,35 +51,25 @@ public class SubtasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof SubtaskViewHolder) {
+            SubtaskViewHolder subtaskViewHolder = (SubtasksAdapter.SubtaskViewHolder)holder;
             final SubtaskModel subtask = subtasksList.get(position);
 
-            ((SubtasksAdapter.SubtaskViewHolder)holder).titleView.setText(subtask.getTitle());
-            ((SubtasksAdapter.SubtaskViewHolder)holder).titleView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
-                    UpdateSubtask.newInstance(subtask.getIdSubtask(), subtask.getTitle()).show(manager, UpdateSubtask.TAG);
-                }
+            subtaskViewHolder.titleView.setText(subtask.getTitle());
+            subtaskViewHolder.titleView.setOnClickListener(v -> {
+                FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+                UpdateSubtask.newInstance(subtask.getIdSubtask(), subtask.getTitle()).show(manager, UpdateSubtask.TAG);
             });
-            if (((SubtaskViewHolder)holder).radioButton.isChecked()) {
-                ((SubtaskViewHolder)holder).radioButton.setChecked(false);
-            }
-            ((SubtaskViewHolder)holder).radioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    db.deleteSubtask(subtask.getIdSubtask());
-                    removeAt(holder.getAdapterPosition());
-                }
+
+            subtaskViewHolder.radioButton.setChecked(subtaskViewHolder.radioButton.isChecked());
+            subtaskViewHolder.radioButton.setOnClickListener(v -> {
+                db.deleteSubtask(subtask.getIdSubtask());
+                removeAt(subtaskViewHolder.getBindingAdapterPosition());
             });
         }
 
         if (holder instanceof AddSubtasksViewHolder) {
-            ((AddSubtasksViewHolder)holder).addNewSubtask.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CreateSubtask.newInstance(id).show(((AppCompatActivity)context).getSupportFragmentManager(), CreateSubtask.TAG);
-                }
-            });
+            AddSubtasksViewHolder addSubtasksViewHolder = (AddSubtasksViewHolder)holder;
+            addSubtasksViewHolder.addNewSubtask.setOnClickListener(v -> CreateSubtask.newInstance(id).show(((AppCompatActivity)context).getSupportFragmentManager(), CreateSubtask.TAG));
         }
     }
 

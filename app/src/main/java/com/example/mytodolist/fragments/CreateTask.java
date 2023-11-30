@@ -13,7 +13,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentResultListener;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.mytodolist.OnDialogCloseListener;
 import com.example.mytodolist.R;
@@ -53,7 +53,9 @@ public class CreateTask extends BottomSheetDialogFragment {
                 (requestKey, results) -> {
                     int result = results.getInt("priority");
                     priorityButton.setHint(String.valueOf(result));
-                    setPriorityButtonIcon(result);
+                    priorityButton.setIcon(AppCompatResources.getDrawable(getContext(), priorityToIcon(result)));
+                    if (result == 3) priorityButton.setIconTint(ColorStateList.valueOf(getContext().getColor(R.color.white)));
+                    else priorityButton.setIconTint(null);
                 }
         );
 
@@ -85,26 +87,19 @@ public class CreateTask extends BottomSheetDialogFragment {
         priorityButton.setOnClickListener(v -> ChangePriority.newInstance().show(getActivity().getSupportFragmentManager(), ChangePriority.TAG));
     }
 
-    private void setPriorityButtonIcon(int id) {
-        switch (id) {
+    private int priorityToIcon(int priority) {
+        switch (priority) {
             case 1:
-                priorityButton.setIcon(getContext().getDrawable(R.drawable.priority_1));
-                break;
+                return R.drawable.priority_1;
             case 2:
-                priorityButton.setIcon(getContext().getDrawable(R.drawable.priority_2));
-                break;
-            case 3:
-                priorityButton.setIcon(getContext().getDrawable(R.drawable.priority_3));
-                break;
+                return R.drawable.priority_2;
             case 4:
-                priorityButton.setIcon(getContext().getDrawable(R.drawable.priority_4));
-                break;
+                return R.drawable.priority_4;
             case 5:
-                priorityButton.setIcon(getContext().getDrawable(R.drawable.priority_5));
-                break;
+                return R.drawable.priority_5;
+            default:
+                return R.drawable.priority_3;
         }
-        if (id == 3) priorityButton.setIconTint(ColorStateList.valueOf(getContext().getColor(R.color.white)));
-        else priorityButton.setIconTint(null);
     }
 
     public void onDismiss(@NonNull DialogInterface dialog) {

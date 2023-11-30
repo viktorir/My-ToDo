@@ -53,50 +53,40 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TaskViewHolder) {
             final TaskModel task = tasksList.get(position);
+            TaskViewHolder taskViewHolder = (TaskViewHolder)holder;
 
-            if (task.getCategoryId() == 0) ((TaskViewHolder)holder).categoryView.setText(R.string.unChangeCategory);
-            else ((TaskViewHolder)holder).categoryView.setText(task.getCategoryName());
+            if (task.getCategoryId() == 0) taskViewHolder.categoryView.setText(R.string.unChangeCategory);
+            else taskViewHolder.categoryView.setText(task.getCategoryName());
 
-            ((TaskViewHolder)holder).textView.setText(task.getText());
+            taskViewHolder.textView.setText(task.getText());
+            if (task.getText() == null) taskViewHolder.textView.setVisibility(View.GONE);
+            else taskViewHolder.textView.setVisibility(View.VISIBLE);
 
-            if (task.getText() == null) ((TaskViewHolder)holder).textView.setVisibility(View.GONE);
-            else ((TaskViewHolder)holder).textView.setVisibility(View.VISIBLE);
+            taskViewHolder.priorityView.setImageResource(priorityToIcon(task.getPriority()));
 
-            switch (task.getPriority()) {
-                case 1:
-                    ((TaskViewHolder)holder).priorityView.setImageResource(R.drawable.priority_1);
-                    break;
-                case 2:
-                    ((TaskViewHolder)holder).priorityView.setImageResource(R.drawable.priority_2);
-                    break;
-                case 3:
-                    ((TaskViewHolder)holder).priorityView.setImageResource(R.drawable.priority_3);
-                    break;
-                case 4:
-                    ((TaskViewHolder)holder).priorityView.setImageResource(R.drawable.priority_4);
-                    break;
-                case 5:
-                    ((TaskViewHolder)holder).priorityView.setImageResource(R.drawable.priority_5);
-                    break;
+            taskViewHolder.radioButton.setChecked(taskViewHolder.radioButton.isChecked());
+            if (taskViewHolder.radioButton.isSelected()) {
+                db.deleteTask(task.getIdTask());
+                removeAt(taskViewHolder.getBindingAdapterPosition());
             }
+            taskViewHolder.radioButton.setOnClickListener(v -> {
+                db.deleteTask(task.getIdTask());
+                removeAt(taskViewHolder.getBindingAdapterPosition());
+            });
 
-            if (task.getIsDone()) {
-                ((TaskViewHolder)holder).radioButton.setChecked(true);
-                ((TaskViewHolder)holder).radioButton.setSelected(true);
-            } else {
-                ((TaskViewHolder)holder).radioButton.setChecked(false);
-                ((TaskViewHolder)holder).radioButton.setSelected(false);
-            }
-
-            ((TaskViewHolder)holder).titleView.setText(task.getTitle());
-            ((TaskViewHolder)holder).titleView.setHint(String.valueOf(task.getIdTask()));
-            ((TaskViewHolder)holder).titleView.setOnClickListener(v -> {
+            taskViewHolder.titleView.setText(task.getTitle());
+            taskViewHolder.titleView.setOnClickListener(v -> {
                 FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
                 UpdateTask.newInstance(task.getIdTask(),
                         task.getTitle(),
                         task.getText(),
                         task.getPriority()).show(manager, UpdateTask.TAG);
             });
+        }
+
+        if (holder instanceof NoTasksViewHolder) {
+            NoTasksViewHolder noTasksViewHolder = (NoTasksViewHolder)holder;
+            noTasksViewHolder.noTaskCardView.setOnClickListener(v -> Toast.makeText(v.getContext(), R.string.create_task_helper, Toast.LENGTH_LONG).show());
         }
     }
 
@@ -122,7 +112,22 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         notifyItemRangeChanged(pos, tasksList.size());
     }
 
-    public class TaskViewHolder extends RecyclerView.ViewHolder {
+    private int priorityToIcon(int priority) {
+        switch (priority) {
+            case 1:
+                return R.drawable.priority_1;
+            case 2:
+                return R.drawable.priority_2;
+            case 4:
+                return R.drawable.priority_4;
+            case 5:
+                return R.drawable.priority_5;
+            default:
+                return R.drawable.priority_3;
+        }
+    }
+
+    public static class TaskViewHolder extends RecyclerView.ViewHolder {
 
         RadioButton radioButton;
         TextView textView, titleView, categoryView;
@@ -136,26 +141,15 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             textView = itemView.findViewById(R.id.TextView);
             categoryView = itemView.findViewById(R.id.CategoryView);
             priorityView = itemView.findViewById(R.id.PriorityView);
-
-            if (radioButton.isSelected()) {
-                db.deleteTask(Integer.parseInt((String)titleView.getHint()));
-                removeAt(getBindingAdapterPosition());
-            }
-
-            radioButton.setOnClickListener(v -> {
-                db.deleteTask(Integer.parseInt((String)titleView.getHint()));
-                removeAt(getBindingAdapterPosition());
-            });
         }
     }
 
-    public class NoTasksViewHolder extends RecyclerView.ViewHolder {
+    public static class NoTasksViewHolder extends RecyclerView.ViewHolder {
         CardView noTaskCardView;
         public NoTasksViewHolder(@NonNull View itemView) {
             super(itemView);
 
             noTaskCardView = itemView.findViewById(R.id.noTaskCardView);
-            noTaskCardView.setOnClickListener(v -> Toast.makeText(v.getContext(), R.string.create_task_helper, Toast.LENGTH_LONG).show());
         }
     }
 }

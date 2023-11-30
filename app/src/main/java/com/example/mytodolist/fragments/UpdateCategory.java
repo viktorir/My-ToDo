@@ -77,14 +77,11 @@ public class UpdateCategory extends BottomSheetDialogFragment {
 
         updateButton.setEnabled(!nameCategory.getText().toString().equals(""));
 
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataBaseHelper db = new DataBaseHelper(UpdateCategory.this.getContext());
-                db.updateCategory(id ,nameCategory.getText().toString().trim(), Color.valueOf(Color.parseColor(color)));
-                db.close();
-                dismiss();
-            }
+        updateButton.setOnClickListener(v -> {
+            DataBaseHelper db = new DataBaseHelper(UpdateCategory.this.getContext());
+            db.updateCategory(id ,nameCategory.getText().toString().trim(), Color.valueOf(Color.parseColor(color)));
+            db.close();
+            dismiss();
         });
     }
 

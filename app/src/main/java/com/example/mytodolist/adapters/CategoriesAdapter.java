@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytodolist.R;
 import com.example.mytodolist.fragments.UpdateCategory;
-import com.example.mytodolist.fragments.UpdateTask;
 import com.example.mytodolist.models.CategoryModel;
 import com.example.mytodolist.utils.DataBaseHelper;
 
@@ -41,7 +40,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         RecyclerView.ViewHolder viewHolder = null;
 
         if (viewType == CATEGORY_VIEW) viewHolder = new CategoriesAdapter.CategoryViewHolder(view);
-        if (viewType == NO_CATEGORY_VIEW) viewHolder = new CategoriesAdapter.NoCategoryViewHolder(view);
+        if (viewType == NO_CATEGORY_VIEW || viewHolder == null) viewHolder = new CategoriesAdapter.NoCategoryViewHolder(view);
 
         return viewHolder;
     }
@@ -49,38 +48,30 @@ public class CategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof CategoryViewHolder) {
+            CategoryViewHolder categoryHolder = (CategoryViewHolder)holder;
             final CategoryModel category = categoriesList.get(position - 1);
 
-            ((CategoryViewHolder)holder).nameText.setText(category.getName());
-            ((CategoryViewHolder)holder).coloredIcon.setColorFilter(Color.parseColor(category.getColor()));
+            categoryHolder.nameText.setText(category.getName());
+            categoryHolder.coloredIcon.setColorFilter(Color.parseColor(category.getColor()));
 
-            ((CategoryViewHolder)holder).nameText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
-                    UpdateCategory.newInstance(category.getIdCategory(),
-                            category.getName(),
-                            category.getColor()).show(manager, UpdateCategory.TAG);
-                }
+            categoryHolder.nameText.setOnClickListener(v -> {
+                FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+                UpdateCategory.newInstance(category.getIdCategory(),
+                        category.getName(),
+                        category.getColor()).show(manager, UpdateCategory.TAG);
             });
 
-            ((CategoryViewHolder)holder).deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    db.deleteCategory(category.getIdCategory());
-                    removeAt(holder.getAdapterPosition());
-                }
+            categoryHolder.deleteButton.setOnClickListener(v -> {
+                db.deleteCategory(category.getIdCategory());
+                removeAt(holder.getBindingAdapterPosition());
             });
         }
-        if (holder instanceof NoCategoryViewHolder) {
-            ((NoCategoryViewHolder)holder).nameText.setText(context.getResources().getString(R.string.unChangeCategory));
 
-            ((NoCategoryViewHolder)holder).nameText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "This base ¯\\_(ツ)_/¯", Toast.LENGTH_LONG).show();
-                }
-            });
+        if (holder instanceof NoCategoryViewHolder) {
+            NoCategoryViewHolder noCategoryHolder = (NoCategoryViewHolder)holder;
+            noCategoryHolder.nameText.setText(context.getResources().getString(R.string.unChangeCategory));
+
+            noCategoryHolder.nameText.setOnClickListener(v -> Toast.makeText(context, "This base ¯\\_(ツ)_/¯", Toast.LENGTH_LONG).show());
         }
     }
 
@@ -107,7 +98,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyItemRangeChanged(pos - 1, categoriesList.size());
     }
 
-    public class CategoryViewHolder extends RecyclerView.ViewHolder {
+    public static class CategoryViewHolder extends RecyclerView.ViewHolder {
         ImageView coloredIcon, deleteButton;
         TextView nameText;
         public CategoryViewHolder(View itemView) {
@@ -119,7 +110,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public class NoCategoryViewHolder extends RecyclerView.ViewHolder {
+    public static class NoCategoryViewHolder extends RecyclerView.ViewHolder {
         TextView nameText;
         public NoCategoryViewHolder(View itemView) {
             super(itemView);

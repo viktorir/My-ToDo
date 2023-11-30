@@ -209,7 +209,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 SubtaskModel subtask = new SubtaskModel();
                 subtask.setIdSubtask(cursor.getInt(cursor.getColumnIndexOrThrow("id_subtask")));
                 subtask.setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
-                subtask.setIsDone(cursor.getInt(cursor.getColumnIndexOrThrow("is_done")) > 0);
+                subtask.setIsDone(cursor.getInt(cursor.getColumnIndexOrThrow("is_done")) != 0);
                 subtasksList.add(subtask);
             } while (cursor.moveToNext());
         }

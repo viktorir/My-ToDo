@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import com.example.mytodolist.adapters.CategoriesAdapter;
@@ -36,19 +35,9 @@ public class CategoryManagerActivity extends AppCompatActivity implements OnDial
         backButton = findViewById(R.id.backButton);
         createCategoryButton = findViewById(R.id.createCategoryButton);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        backButton.setOnClickListener(v -> finish());
 
-        createCategoryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateCategory.newInstance().show(getSupportFragmentManager(), CreateCategory.TAG);
-            }
-        });
+        createCategoryButton.setOnClickListener(v -> CreateCategory.newInstance().show(getSupportFragmentManager(), CreateCategory.TAG));
 
 
         db = new DataBaseHelper(CategoryManagerActivity.this);

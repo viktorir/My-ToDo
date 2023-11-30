@@ -59,19 +59,9 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
         tasksList = db.readTasks();
         tasksAdapter.setTasks(tasksList);
 
-        createTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateTask.newInstance().show(getSupportFragmentManager(), CreateTask.TAG);
-            }
-        });
+        createTask.setOnClickListener(v -> CreateTask.newInstance().show(getSupportFragmentManager(), CreateTask.TAG));
 
-        settingsMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMainPopupMenu(v);
-            }
-        });
+        settingsMenuButton.setOnClickListener(v -> showMainPopupMenu(v));
     }
 
     public void showMainPopupMenu(View v) {
