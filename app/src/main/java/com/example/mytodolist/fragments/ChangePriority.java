@@ -31,57 +31,25 @@ public class ChangePriority extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         p1 = view.findViewById(R.id.P1Button);
-        p1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle result = new Bundle();
-                result.putInt("priority", 1);
-                getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);
-                dismiss();
-            }
-        });
+        p1.setOnClickListener(v -> setResultChange(1));
 
         p2 = view.findViewById(R.id.P2Button);
-        p2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle result = new Bundle();
-                result.putInt("priority", 2);
-                getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);dismiss();
-            }
-        });
+        p2.setOnClickListener(v -> setResultChange(2));
 
         p3 = view.findViewById(R.id.P3Button);
-        p3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle result = new Bundle();
-                result.putInt("priority", 3);
-                getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);
-                dismiss();
-            }
-        });
+        p3.setOnClickListener(v -> setResultChange(3));
 
         p4 = view.findViewById(R.id.P4Button);
-        p4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle result = new Bundle();
-                result.putInt("priority", 4);
-                getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);
-                dismiss();
-            }
-        });
+        p4.setOnClickListener(v -> setResultChange(4));
 
         p5 = view.findViewById(R.id.P5Button);
-        p5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle result = new Bundle();
-                result.putInt("priority", 5);
-                getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);
-                dismiss();
-            }
-        });
+        p5.setOnClickListener(v -> setResultChange(5));
+    }
+
+    private void setResultChange(int res) {
+        Bundle result = new Bundle();
+        result.putInt("priority", res);
+        getActivity().getSupportFragmentManager().setFragmentResult("priorityData", result);
+        dismiss();
     }
 }

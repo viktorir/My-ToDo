@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +27,7 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private static final int TASK_VIEW = R.layout.item_task;
     private static final int NO_TASKS_VIEW = R.layout.item_no_tasks;
+
     private List<TaskModel> tasksList;
     Context context;
     DataBaseHelper db;
@@ -41,7 +44,7 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         RecyclerView.ViewHolder viewHolder = null;
 
         if (viewType == TASK_VIEW) viewHolder = new TaskViewHolder(view);
-        if (viewType == NO_TASKS_VIEW) viewHolder = new NoTasksViewHolder(view);
+        if (viewType == NO_TASKS_VIEW || viewHolder == null) viewHolder = new NoTasksViewHolder(view);
 
         return viewHolder;
     }
@@ -51,7 +54,7 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (holder instanceof TaskViewHolder) {
             final TaskModel task = tasksList.get(position);
 
-            if (task.getCategoryId() == 0) ((TaskViewHolder)holder).categoryView.setText("No category");
+            if (task.getCategoryId() == 0) ((TaskViewHolder)holder).categoryView.setText(R.string.unChangeCategory);
             else ((TaskViewHolder)holder).categoryView.setText(task.getCategoryName());
 
             ((TaskViewHolder)holder).textView.setText(task.getText());
@@ -87,15 +90,12 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             ((TaskViewHolder)holder).titleView.setText(task.getTitle());
             ((TaskViewHolder)holder).titleView.setHint(String.valueOf(task.getIdTask()));
-            ((TaskViewHolder)holder).titleView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
-                    UpdateTask.newInstance(task.getIdTask(),
-                            task.getTitle(),
-                            task.getText(),
-                            task.getPriority()).show(manager, UpdateTask.TAG);
-                }
+            ((TaskViewHolder)holder).titleView.setOnClickListener(v -> {
+                FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+                UpdateTask.newInstance(task.getIdTask(),
+                        task.getTitle(),
+                        task.getText(),
+                        task.getPriority()).show(manager, UpdateTask.TAG);
             });
         }
     }
@@ -139,23 +139,23 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             if (radioButton.isSelected()) {
                 db.deleteTask(Integer.parseInt((String)titleView.getHint()));
-                removeAt(getAdapterPosition());
+                removeAt(getBindingAdapterPosition());
             }
 
-            radioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    db.deleteTask(Integer.parseInt((String)titleView.getHint()));
-                    removeAt(getAdapterPosition());
-                }
+            radioButton.setOnClickListener(v -> {
+                db.deleteTask(Integer.parseInt((String)titleView.getHint()));
+                removeAt(getBindingAdapterPosition());
             });
         }
     }
 
     public class NoTasksViewHolder extends RecyclerView.ViewHolder {
-
+        CardView noTaskCardView;
         public NoTasksViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            noTaskCardView = itemView.findViewById(R.id.noTaskCardView);
+            noTaskCardView.setOnClickListener(v -> Toast.makeText(v.getContext(), R.string.create_task_helper, Toast.LENGTH_LONG).show());
         }
     }
 }

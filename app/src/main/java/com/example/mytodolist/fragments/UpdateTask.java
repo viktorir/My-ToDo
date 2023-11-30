@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,13 +63,10 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
         getActivity().getSupportFragmentManager().setFragmentResultListener(
                 "priorityData",
                 this,
-                new FragmentResultListener() {
-                    @Override
-                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle results) {
-                        int result = results.getInt("priority");
-                        priorityButton.setHint(String.valueOf(result));
-                        setPriorityButtonIcon(result);
-                    }
+                (requestKey, results) -> {
+                    int result = results.getInt("priority");
+                    priorityButton.setHint(String.valueOf(result));
+                    setPriorityButtonIcon(result);
                 }
         );
 
@@ -99,13 +95,7 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (titleTask.getText().toString().equals(""))
-                {
-                    updateButton.setEnabled(false);
-                }
-                else {
-                    updateButton.setEnabled(true);
-                }
+                updateButton.setEnabled(!titleTask.getText().toString().equals(""));
             }
 
             @Override
@@ -114,29 +104,16 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
             }
         });
 
-        if (titleTask.getText().toString().equals(""))
-        {
-            updateButton.setEnabled(false);
-        }
-        else {
-            updateButton.setEnabled(true);
-        }
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataBaseHelper db = new DataBaseHelper(UpdateTask.this.getContext());
-                db.updateTask(id ,titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt(String.valueOf(priorityButton.getHint())));
-                dismiss();
-            }
+        updateButton.setEnabled(!titleTask.getText().toString().equals(""));
+        updateButton.setOnClickListener(v -> {
+            DataBaseHelper db = new DataBaseHelper(UpdateTask.this.getContext());
+            db.updateTask(id ,titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt(String.valueOf(priorityButton.getHint())));
+            db.close();
+            dismiss();
         });
 
         setPriorityButtonIcon(priority);
-        priorityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChangePriority.newInstance().show(getActivity().getSupportFragmentManager(), ChangePriority.TAG);
-            }
-        });
+        priorityButton.setOnClickListener(v -> ChangePriority.newInstance().show(getActivity().getSupportFragmentManager(), ChangePriority.TAG));
 
         db = new DataBaseHelper(getActivity());
         subtasksList = new ArrayList<>();
@@ -177,6 +154,7 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
         subtasksAdapter.notifyDataSetChanged();
         Activity activity = getActivity();
         if (activity instanceof OnDialogCloseListener){
+            super.onDismiss(dialog);
             ((OnDialogCloseListener)activity).onDialogClose(dialog);
         }
     }

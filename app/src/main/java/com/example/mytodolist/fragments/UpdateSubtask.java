@@ -61,13 +61,7 @@ public class UpdateSubtask extends BottomSheetDialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (titleSubtask.getText().toString().equals(""))
-                {
-                    updateButton.setEnabled(false);
-                }
-                else {
-                    updateButton.setEnabled(true);
-                }
+                updateButton.setEnabled(!titleSubtask.getText().toString().equals(""));
             }
 
             @Override
@@ -76,22 +70,13 @@ public class UpdateSubtask extends BottomSheetDialogFragment {
             }
         });
 
-        if (titleSubtask.getText().toString().equals(""))
-        {
-            updateButton.setEnabled(false);
-        }
-        else {
-            updateButton.setEnabled(true);
-        }
+        updateButton.setEnabled(!titleSubtask.getText().toString().equals(""));
 
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataBaseHelper db = new DataBaseHelper(UpdateSubtask.this.getContext());
-                db.updateSubtask(id ,titleSubtask.getText().toString().trim());
-                db.close();
-                dismiss();
-            }
+        updateButton.setOnClickListener(v -> {
+            DataBaseHelper db = new DataBaseHelper(UpdateSubtask.this.getContext());
+            db.updateSubtask(id ,titleSubtask.getText().toString().trim());
+            db.close();
+            dismiss();
         });
     }
 

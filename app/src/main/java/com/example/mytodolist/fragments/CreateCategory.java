@@ -50,13 +50,7 @@ public class CreateCategory extends BottomSheetDialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (nameCategory.getText().toString().equals(""))
-                {
-                    addButton.setEnabled(false);
-                }
-                else {
-                    addButton.setEnabled(true);
-                }
+                addButton.setEnabled(!nameCategory.getText().toString().equals(""));
             }
 
             @Override
@@ -66,13 +60,11 @@ public class CreateCategory extends BottomSheetDialogFragment {
         });
 
         addButton.setEnabled(false);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataBaseHelper db = new DataBaseHelper(CreateCategory.this.getContext());
-                db.insertCategory(nameCategory.getText().toString().trim());
-                dismiss();
-            }
+        addButton.setOnClickListener(v -> {
+            DataBaseHelper db = new DataBaseHelper(CreateCategory.this.getContext());
+            db.insertCategory(nameCategory.getText().toString().trim());
+            db.close();
+            dismiss();
         });
     }
 

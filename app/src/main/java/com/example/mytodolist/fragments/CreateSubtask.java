@@ -1,7 +1,5 @@
 package com.example.mytodolist.fragments;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,13 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import com.example.mytodolist.OnDialogCloseListener;
 import com.example.mytodolist.R;
 import com.example.mytodolist.utils.DataBaseHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -28,11 +25,11 @@ public class CreateSubtask extends BottomSheetDialogFragment {
     Button addButton;
 
     public static CreateSubtask newInstance(int id) {
-        BottomSheetDialogFragment addNewSubtask = new CreateSubtask();
+        CreateSubtask addNewSubtask = new CreateSubtask();
         Bundle result = new Bundle();
         result.putInt("id_task", id);
         addNewSubtask.setArguments(result);
-        return (CreateSubtask)addNewSubtask;
+        return addNewSubtask;
     }
 
     @Nullable
@@ -55,13 +52,7 @@ public class CreateSubtask extends BottomSheetDialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (titleSubtask.getText().toString().equals(""))
-                {
-                    addButton.setEnabled(false);
-                }
-                else {
-                    addButton.setEnabled(true);
-                }
+                addButton.setEnabled(!titleSubtask.getText().toString().equals(""));
             }
 
             @Override
@@ -71,13 +62,14 @@ public class CreateSubtask extends BottomSheetDialogFragment {
         });
 
         addButton.setEnabled(false);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataBaseHelper db = new DataBaseHelper(CreateSubtask.this.getContext());
-                db.insertSubtask(getArguments().getInt("id_task"), titleSubtask.getText().toString().trim());
-                dismiss();
-            }
+        addButton.setOnClickListener(v -> {
+            DataBaseHelper db = new DataBaseHelper(CreateSubtask.this.getContext());
+
+            if (getArguments() != null) db.insertSubtask(getArguments().getInt("id_task"), titleSubtask.getText().toString().trim());
+            else Toast.makeText(getContext(), "no arguments!", Toast.LENGTH_LONG).show();
+
+            db.close();
+            dismiss();
         });
     }
 

@@ -14,4 +14,6 @@
     <string name="add_subtasks_button">Добавить подзадачу</string>
     <string name="no_tasks_description">Но вы всегда можете их найти!</string>
     <string name="no_tasks_header">Cейчас у вас нет задач:(</string>
+    <string name="error_item">" Упс, видимо, возникла ошибка отображения, разработчик скоро это исправит! "</string>
+    <string name="create_task_helper">Вы можете создать задачу, нажав на кнопку плюс внизу  ッ</string>
 </resources>

@@ -14,4 +14,6 @@
     <string name="add_subtasks_button">Add Subtasks</string>
     <string name="no_tasks_description">But you can always find them!</string>
     <string name="no_tasks_header">You have no tasks right now :(</string>
+    <string name="error_item">Oops... Apparently there was a display error, the developer will fix it soon!</string>
+    <string name="create_task_helper">You can create a task by clicking on the plus button at the bottom ッ</string>
 </resources>

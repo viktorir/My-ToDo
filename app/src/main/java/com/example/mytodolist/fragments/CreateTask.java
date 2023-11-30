@@ -50,13 +50,10 @@ public class CreateTask extends BottomSheetDialogFragment {
         getActivity().getSupportFragmentManager().setFragmentResultListener(
                 "priorityData",
                 this,
-                new FragmentResultListener() {
-                    @Override
-                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle results) {
-                        int result = results.getInt("priority");
-                        priorityButton.setHint(String.valueOf(result));
-                        setPriorityButtonIcon(result);
-                    }
+                (requestKey, results) -> {
+                    int result = results.getInt("priority");
+                    priorityButton.setHint(String.valueOf(result));
+                    setPriorityButtonIcon(result);
                 }
         );
 
@@ -68,13 +65,7 @@ public class CreateTask extends BottomSheetDialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (titleTask.getText().toString().equals(""))
-                {
-                    addButton.setEnabled(false);
-                }
-                else {
-                    addButton.setEnabled(true);
-                }
+                addButton.setEnabled(!titleTask.getText().toString().equals(""));
             }
 
             @Override
@@ -84,21 +75,14 @@ public class CreateTask extends BottomSheetDialogFragment {
         });
 
         addButton.setEnabled(false);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataBaseHelper db = new DataBaseHelper(CreateTask.this.getContext());
-                db.insertTask(titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt((String)priorityButton.getHint()));
-                dismiss();
-            }
+        addButton.setOnClickListener(v -> {
+            DataBaseHelper db = new DataBaseHelper(CreateTask.this.getContext());
+            db.insertTask(titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt((String)priorityButton.getHint()));
+            db.close();
+            dismiss();
         });
 
-        priorityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChangePriority.newInstance().show(getActivity().getSupportFragmentManager(), ChangePriority.TAG);
-            }
-        });
+        priorityButton.setOnClickListener(v -> ChangePriority.newInstance().show(getActivity().getSupportFragmentManager(), ChangePriority.TAG));
     }
 
     private void setPriorityButtonIcon(int id) {
