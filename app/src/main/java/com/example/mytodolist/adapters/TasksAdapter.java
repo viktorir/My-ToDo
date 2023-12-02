@@ -64,7 +64,7 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             taskViewHolder.priorityView.setImageResource(priorityToIcon(task.getPriority()));
 
-            taskViewHolder.radioButton.setChecked(taskViewHolder.radioButton.isChecked());
+            taskViewHolder.radioButton.setChecked(task.getIsDone());
             if (taskViewHolder.radioButton.isSelected()) {
                 db.deleteTask(task.getIdTask());
                 removeAt(taskViewHolder.getBindingAdapterPosition());

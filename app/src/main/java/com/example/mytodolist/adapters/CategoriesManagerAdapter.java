@@ -21,14 +21,14 @@ import com.example.mytodolist.utils.DataBaseHelper;
 
 import java.util.List;
 
-public class CategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class CategoriesManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final int CATEGORY_VIEW = R.layout.item_category;
-    private static final int NO_CATEGORY_VIEW = R.layout.item_unchange_category;
+    private static final int NO_CATEGORY_VIEW = R.layout.item_no_category;
     private List<CategoryModel> categoriesList;
     Context context;
     DataBaseHelper db;
 
-    public CategoriesAdapter(Context context, DataBaseHelper db) {
+    public CategoriesManagerAdapter(Context context, DataBaseHelper db) {
         this.context = context;
         this.db = db;
     }
@@ -39,8 +39,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         View view = LayoutInflater.from(context).inflate(viewType, parent, false);
         RecyclerView.ViewHolder viewHolder = null;
 
-        if (viewType == CATEGORY_VIEW) viewHolder = new CategoriesAdapter.CategoryViewHolder(view);
-        if (viewType == NO_CATEGORY_VIEW || viewHolder == null) viewHolder = new CategoriesAdapter.NoCategoryViewHolder(view);
+        if (viewType == CATEGORY_VIEW) viewHolder = new CategoriesManagerAdapter.CategoryViewHolder(view);
+        if (viewType == NO_CATEGORY_VIEW || viewHolder == null) viewHolder = new CategoriesManagerAdapter.NoCategoryViewHolder(view);
 
         return viewHolder;
     }

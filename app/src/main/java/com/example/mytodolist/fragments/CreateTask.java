@@ -25,7 +25,7 @@ public class CreateTask extends BottomSheetDialogFragment {
     public static final String TAG = "AddTask";
 
     EditText titleTask, descriptionTask;
-    MaterialButton addButton, priorityButton;
+    MaterialButton addButton, priorityButton, categoryButton;
 
     public static CreateTask newInstance() {
         return new CreateTask();
@@ -45,6 +45,7 @@ public class CreateTask extends BottomSheetDialogFragment {
         descriptionTask = view.findViewById(R.id.DescriptionTask);
         addButton = view.findViewById(R.id.AddButton);
         priorityButton = view.findViewById(R.id.PriorityButton);
+        categoryButton = view.findViewById(R.id.CategoryButton);
         priorityButton.setHint("3");
 
         getActivity().getSupportFragmentManager().setFragmentResultListener(
@@ -85,6 +86,8 @@ public class CreateTask extends BottomSheetDialogFragment {
         });
 
         priorityButton.setOnClickListener(v -> ChangePriority.newInstance().show(getActivity().getSupportFragmentManager(), ChangePriority.TAG));
+
+        categoryButton.setOnClickListener(v -> ChangeCategory.newInstance().show(getActivity().getSupportFragmentManager(), ChangeCategory.TAG));
     }
 
     private int priorityToIcon(int priority) {

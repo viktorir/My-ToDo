@@ -8,7 +8,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.mytodolist.adapters.CategoriesAdapter;
+import com.example.mytodolist.adapters.CategoriesManagerAdapter;
 import com.example.mytodolist.fragments.CreateCategory;
 import com.example.mytodolist.models.CategoryModel;
 import com.example.mytodolist.utils.DataBaseHelper;
@@ -22,7 +22,7 @@ public class CategoryManagerActivity extends AppCompatActivity implements OnDial
     FloatingActionButton createCategoryButton;
     TextView backButton;
     RecyclerView categoryList;
-    CategoriesAdapter categoriesAdapter;
+    CategoriesManagerAdapter categoriesManagerAdapter;
     DataBaseHelper db;
     List<CategoryModel> categoriesList;
 
@@ -39,22 +39,21 @@ public class CategoryManagerActivity extends AppCompatActivity implements OnDial
 
         createCategoryButton.setOnClickListener(v -> CreateCategory.newInstance().show(getSupportFragmentManager(), CreateCategory.TAG));
 
-
         db = new DataBaseHelper(CategoryManagerActivity.this);
         categoriesList = new ArrayList<>();
-        categoriesAdapter = new CategoriesAdapter(CategoryManagerActivity.this, db);
+        categoriesManagerAdapter = new CategoriesManagerAdapter(CategoryManagerActivity.this, db);
 
         categoryList.setLayoutManager(new LinearLayoutManager(this));
-        categoryList.setAdapter(categoriesAdapter);
+        categoryList.setAdapter(categoriesManagerAdapter);
 
         categoriesList = db.readCategories();
-        categoriesAdapter.setCategories(categoriesList);
+        categoriesManagerAdapter.setCategories(categoriesList);
     }
 
     @Override
     public void onDialogClose(DialogInterface dialogInterface) {
         categoriesList = db.readCategories();
-        categoriesAdapter.setCategories(categoriesList);
-        categoriesAdapter.notifyDataSetChanged();
+        categoriesManagerAdapter.setCategories(categoriesList);
+        categoriesManagerAdapter.notifyDataSetChanged();
     }
 }
