@@ -53,14 +53,11 @@ public class ChangeCategory extends BottomSheetDialogFragment {
         categoriesChangeAdapter.setCategories(categoriesList);
     }
 
-    AdapterToFragmentCommunication commutator = new AdapterToFragmentCommunication() {
-        @Override
-        public void categoryRespond(int position, int id, String name) {
-            Bundle result = new Bundle();
-            result.putInt("id", id);
-            result.putString("name", name);
-            getActivity().getSupportFragmentManager().setFragmentResult("categoryData", result);
-            dismiss();
-        }
+    AdapterToFragmentCommunication commutator = (position, id, name) -> {
+        Bundle result = new Bundle();
+        result.putInt("id", id);
+        result.putString("name", name);
+        getActivity().getSupportFragmentManager().setFragmentResult("categoryData", result);
+        dismiss();
     };
 }

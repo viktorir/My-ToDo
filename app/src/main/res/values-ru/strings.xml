@@ -16,4 +16,12 @@
     <string name="no_tasks_header">Cейчас у вас нет задач:(</string>
     <string name="error_item">" Упс, видимо, возникла ошибка отображения, разработчик скоро это исправит! "</string>
     <string name="create_task_helper">Вы можете создать задачу, нажав на кнопку плюс внизу  ッ</string>
+    <string name="category_menu">Категория? 🤨</string>
+    <string name="category_hint">Категория</string>
+    <string name="color_button">Цвет</string>
+    <string name="back_button">Назад? 🤨</string>
+    <string name="cateories_list">Категории:</string>
+    <string name="sort_by_menu">Сортировать по:</string>
+    <string name="no_sorted_menu">Без сортировки</string>
+    <string name="priority_menu">Приоритет</string>
 </resources>

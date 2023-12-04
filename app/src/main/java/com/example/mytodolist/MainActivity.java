@@ -64,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
         settingsMenuButton.setOnClickListener(v -> showMainPopupMenu(v));
     }
 
+    public void onResume() {
+        super.onResume();
+        this.onDialogClose(null);
+    }
+
     public void showMainPopupMenu(View v) {
         PopupMenu popup = new PopupMenu(this, v, Gravity.END);
         popup.setOnMenuItemClickListener(this);

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -22,7 +21,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:autofillHints="Category"
-            android:hint="Category"
+            android:hint="@string/category_hint"
             android:inputType="text"
             android:minHeight="48dp"
             android:textColorHint="@color/hint" />
@@ -34,11 +33,12 @@
             android:layout_marginStart="16dp"
             android:backgroundTint="@color/blue_dark"
             android:paddingHorizontal="16dp"
-            android:text="Color"
+            android:text="@string/color_button"
             android:textColor="@color/white"
+            android:visibility="gone"
             app:icon="@drawable/category_icon"
             app:iconGravity="start"
-            app:iconTint="#FFFFFF"/>
+            app:iconTint="#FFFFFF" />
 
         <Button
             android:id="@+id/addButton"

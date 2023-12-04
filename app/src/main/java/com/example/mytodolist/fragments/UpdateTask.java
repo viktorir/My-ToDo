@@ -39,16 +39,17 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
     List<SubtaskModel> subtasksList;
 
     int id, priority, categoryId;
-    String title, text;
+    String title, text, categoryName;
 
-    public static UpdateTask newInstance(int id, String title, String text, int priority, int categoryId) {
+    public static UpdateTask newInstance(int id, String title, String text, int priority, int categoryId, String categoryName) {
         UpdateTask fragment = new UpdateTask();
         Bundle args = new Bundle();
         args.putInt("id_task", id);
         args.putString("title", title);
         args.putString("text", text);
         args.putInt("priority", priority);
-        args.putInt("category_id", categoryId); //last
+        args.putInt("category_id", categoryId);
+        args.putString("category_name", categoryName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,9 +95,8 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
             text = getArguments().getString("text");
             priority = getArguments().getInt("priority");
             categoryId = getArguments().getInt("category_id");
+            categoryName = getArguments().getString("category_name");
         }
-
-
 
         titleTask.setText(title);
         priorityButton.setHint(String.valueOf(priority));
@@ -130,6 +130,9 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
         setPriorityButtonIcon(priority);
         priorityButton.setOnClickListener(v -> ChangePriority.newInstance().show(getActivity().getSupportFragmentManager(), ChangePriority.TAG));
 
+        categoryButton.setHint(String.valueOf(categoryId));
+        if (categoryId != 0) categoryButton.setText(categoryName);
+        else categoryButton.setText(getResources().getString(R.string.unChangeCategory));
         categoryButton.setOnClickListener(v -> ChangeCategory.newInstance().show(getActivity().getSupportFragmentManager(), ChangeCategory.TAG));
 
         db = new DataBaseHelper(getActivity());

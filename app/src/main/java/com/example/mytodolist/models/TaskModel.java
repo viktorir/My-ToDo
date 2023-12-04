@@ -1,9 +1,5 @@
 package com.example.mytodolist.models;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class TaskModel {
     private int idTask, categoryId, priority;
     private String title, text, deadline, categoryName;
@@ -33,11 +29,6 @@ public class TaskModel {
 
     public void setDeadline(String deadline) {
         this.deadline = deadline;
-    }
-
-    public void setDeadline(Date deadline) {
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        this.deadline = fmt.format(deadline);
     }
 
     public boolean getIsDone() {

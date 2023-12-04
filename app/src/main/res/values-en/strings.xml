@@ -16,4 +16,12 @@
     <string name="no_tasks_header">You have no tasks right now :(</string>
     <string name="error_item">Oops... Apparently there was a display error, the developer will fix it soon!</string>
     <string name="create_task_helper">You can create a task by clicking on the plus button at the bottom ッ</string>
+    <string name="category_menu">Category? 🤨</string>
+    <string name="category_hint">Category</string>
+    <string name="color_button">Color</string>
+    <string name="back_button">Back? 🤨</string>
+    <string name="cateories_list">Cateories:</string>
+    <string name="sort_by_menu">Sort by:</string>
+    <string name="no_sorted_menu">No sorted</string>
+    <string name="priority_menu">Priority</string>
 </resources>

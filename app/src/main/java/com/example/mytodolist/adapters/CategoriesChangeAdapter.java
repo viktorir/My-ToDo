@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -82,12 +81,6 @@ public class CategoriesChangeAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void setCategories(List<CategoryModel> categoriesList){
         this.categoriesList = categoriesList;
         notifyDataSetChanged();
-    }
-
-    private void removeAt(int pos) {
-        categoriesList.remove(pos - 1);
-        notifyItemRemoved(pos);
-        notifyItemRangeChanged(pos - 1, categoriesList.size());
     }
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder {

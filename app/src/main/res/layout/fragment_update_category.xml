@@ -36,9 +36,10 @@
             android:paddingHorizontal="16dp"
             android:text="Color"
             android:textColor="@color/white"
+            android:visibility="gone"
             app:icon="@drawable/category_icon"
             app:iconGravity="start"
-            app:iconTint="#FFFFFF"/>
+            app:iconTint="#FFFFFF" />
 
         <Button
             android:id="@+id/updateButton"

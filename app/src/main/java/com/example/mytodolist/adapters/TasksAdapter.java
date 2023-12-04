@@ -80,7 +80,9 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 UpdateTask.newInstance(task.getIdTask(),
                         task.getTitle(),
                         task.getText(),
-                        task.getPriority()).show(manager, UpdateTask.TAG);
+                        task.getPriority(),
+                        task.getCategoryId(),
+                        task.getCategoryName()).show(manager, UpdateTask.TAG);
             });
         }
 

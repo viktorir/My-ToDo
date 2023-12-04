@@ -8,10 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.mytodolist.R;
 import com.example.mytodolist.models.CategoryModel;
 import com.example.mytodolist.models.SubtaskModel;
 import com.example.mytodolist.models.TaskModel;
@@ -20,10 +18,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     private SQLiteDatabase db;
-    private Context context;
+    private final Context context;
     private static final String DATABASE_NAME = "db_todoapp";
 
     public DataBaseHelper(@Nullable Context context) {
@@ -66,21 +65,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertTask(String title) { this.insertTask(0, title, null, new Date(), false, 3); }
-
-    public void insertTask(String title, String text)
-    { this.insertTask(0, title, text, new Date(), false, 3); }
-
-    public void insertTask(String title, String text, int priority)
-    { this.insertTask(0, title, text, new Date(), false, priority); }
-
     public void insertTask(int categoryId, String title, String text, int priority)
     { this.insertTask(categoryId, title, text, new Date(), false, priority); }
 
     public void insertTask(int categoryId, String title, String text, Date deadline , boolean isDone, int priority) {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
         if (categoryId != 0) cv.put("category_id", categoryId);
         cv.put("title", title);
@@ -170,32 +161,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return tasksList;
     }
 
-    public List<SubtaskModel> readSubtasks() {
-        String query = "SELECT * FROM Subtasks";
-        db = this.getReadableDatabase();
-
-        Cursor cursor = null;
-        if(db != null) {
-            cursor = db.rawQuery(query, null);
-        }
-
-        List<SubtaskModel> subtasksList = new ArrayList<>();
-        if (cursor == null) return subtasksList;
-        if (cursor.moveToFirst()) {
-             do {
-                SubtaskModel subtask = new SubtaskModel();
-                subtask.setIdSubtask(cursor.getInt(cursor.getColumnIndexOrThrow("id_subtask")));
-                subtask.setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
-                subtask.setIsDone(cursor.getInt(cursor.getColumnIndexOrThrow("is_done")) > 0);
-                subtasksList.add(subtask);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return subtasksList;
-    }
-
     public List<SubtaskModel> readSubtasks(int idTask) {
         String query = "SELECT * FROM Subtasks WHERE task_id = " + idTask;
         db = this.getReadableDatabase();
@@ -248,14 +213,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return categoriesList;
     }
 
-
-    public void updateTask(int id, String title, String text) { this.updateTask(id, 0, title, text, 3); }
-
     public void updateTask(int id, int categoryId, String title, String text, int priority) {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        if (categoryId != 0) cv.put("category_id", categoryId);
+        cv.put("category_id", categoryId);
         cv.put("title", title);
         cv.put("text", text);
         cv.put("priority", priority);
