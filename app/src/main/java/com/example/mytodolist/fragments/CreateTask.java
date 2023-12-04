@@ -45,8 +45,10 @@ public class CreateTask extends BottomSheetDialogFragment {
         descriptionTask = view.findViewById(R.id.DescriptionTask);
         addButton = view.findViewById(R.id.AddButton);
         priorityButton = view.findViewById(R.id.PriorityButton);
-        categoryButton = view.findViewById(R.id.CategoryButton);
         priorityButton.setHint("3");
+        categoryButton = view.findViewById(R.id.CategoryButton);
+        categoryButton.setHint("0");
+
 
         getActivity().getSupportFragmentManager().setFragmentResultListener(
                 "priorityData",
@@ -57,6 +59,17 @@ public class CreateTask extends BottomSheetDialogFragment {
                     priorityButton.setIcon(AppCompatResources.getDrawable(getContext(), priorityToIcon(result)));
                     if (result == 3) priorityButton.setIconTint(ColorStateList.valueOf(getContext().getColor(R.color.white)));
                     else priorityButton.setIconTint(null);
+                }
+        );
+
+        getActivity().getSupportFragmentManager().setFragmentResultListener(
+                "categoryData",
+                this,
+                (requestKey, results) -> {
+                    int id = results.getInt("id");
+                    String name = results.getString("name");
+                    categoryButton.setHint(String.valueOf(id));
+                    categoryButton.setText(name);
                 }
         );
 
@@ -80,7 +93,7 @@ public class CreateTask extends BottomSheetDialogFragment {
         addButton.setEnabled(false);
         addButton.setOnClickListener(v -> {
             DataBaseHelper db = new DataBaseHelper(CreateTask.this.getContext());
-            db.insertTask(titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt((String)priorityButton.getHint()));
+            db.insertTask(Integer.parseInt((String)categoryButton.getHint()), titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt((String)priorityButton.getHint()));
             db.close();
             dismiss();
         });

@@ -74,6 +74,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void insertTask(String title, String text, int priority)
     { this.insertTask(0, title, text, new Date(), false, priority); }
 
+    public void insertTask(int categoryId, String title, String text, int priority)
+    { this.insertTask(categoryId, title, text, new Date(), false, priority); }
+
     public void insertTask(int categoryId, String title, String text, Date deadline , boolean isDone, int priority) {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -246,12 +249,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void updateTask(int id, String title, String text) { this.updateTask(id, title, text, 3); }
+    public void updateTask(int id, String title, String text) { this.updateTask(id, 0, title, text, 3); }
 
-    public void updateTask(int id, String title, String text, int priority) {
+    public void updateTask(int id, int categoryId, String title, String text, int priority) {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
+        if (categoryId != 0) cv.put("category_id", categoryId);
         cv.put("title", title);
         cv.put("text", text);
         cv.put("priority", priority);

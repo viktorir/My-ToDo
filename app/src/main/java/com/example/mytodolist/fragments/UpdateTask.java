@@ -32,22 +32,23 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
 
     EditText titleTask;
     EditText descriptionTask;
-    MaterialButton updateButton, priorityButton;
+    MaterialButton updateButton, priorityButton, categoryButton;
     RecyclerView subtaskList;
     SubtasksAdapter subtasksAdapter;
     DataBaseHelper db;
     List<SubtaskModel> subtasksList;
 
-    int id, priority;
+    int id, priority, categoryId;
     String title, text;
 
-    public static UpdateTask newInstance(int id, String title, String text, int priority) {
+    public static UpdateTask newInstance(int id, String title, String text, int priority, int categoryId) {
         UpdateTask fragment = new UpdateTask();
         Bundle args = new Bundle();
         args.putInt("id_task", id);
         args.putString("title", title);
         args.putString("text", text);
         args.putInt("priority", priority);
+        args.putInt("category_id", categoryId); //last
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,6 +60,13 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        titleTask = view.findViewById(R.id.TitleSubtask);
+        descriptionTask = view.findViewById(R.id.DescriptionTask);
+        updateButton = view.findViewById(R.id.UpdateButton);
+        priorityButton = view.findViewById(R.id.PriorityButton);
+        subtaskList = view.findViewById(R.id.SubtasksList);
+        categoryButton = view.findViewById(R.id.CategoryButton);
+
         getActivity().getSupportFragmentManager().setFragmentResultListener(
                 "priorityData",
                 this,
@@ -69,18 +77,26 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
                 }
         );
 
+        getActivity().getSupportFragmentManager().setFragmentResultListener(
+                "categoryData",
+                this,
+                (requestKey, results) -> {
+                    int id = results.getInt("id");
+                    String name = results.getString("name");
+                    categoryButton.setHint(String.valueOf(id));
+                    categoryButton.setText(name);
+                }
+        );
+
         if (getArguments() != null) {
             id = getArguments().getInt("id_task");
             title = getArguments().getString("title");
             text = getArguments().getString("text");
             priority = getArguments().getInt("priority");
+            categoryId = getArguments().getInt("category_id");
         }
 
-        titleTask = view.findViewById(R.id.TitleSubtask);
-        descriptionTask = view.findViewById(R.id.DescriptionTask);
-        updateButton = view.findViewById(R.id.UpdateButton);
-        priorityButton = view.findViewById(R.id.PriorityButton);
-        subtaskList = view.findViewById(R.id.SubtasksList);
+
 
         titleTask.setText(title);
         priorityButton.setHint(String.valueOf(priority));
@@ -106,13 +122,15 @@ public class UpdateTask extends BottomSheetDialogFragment implements DialogInter
         updateButton.setEnabled(!titleTask.getText().toString().equals(""));
         updateButton.setOnClickListener(v -> {
             DataBaseHelper db = new DataBaseHelper(UpdateTask.this.getContext());
-            db.updateTask(id ,titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt(String.valueOf(priorityButton.getHint())));
+            db.updateTask(id, Integer.parseInt((String) categoryButton.getHint()),titleTask.getText().toString().trim(), descriptionTask.getText().toString().trim(), Integer.parseInt(String.valueOf(priorityButton.getHint())));
             db.close();
             dismiss();
         });
 
         setPriorityButtonIcon(priority);
         priorityButton.setOnClickListener(v -> ChangePriority.newInstance().show(getActivity().getSupportFragmentManager(), ChangePriority.TAG));
+
+        categoryButton.setOnClickListener(v -> ChangeCategory.newInstance().show(getActivity().getSupportFragmentManager(), ChangeCategory.TAG));
 
         db = new DataBaseHelper(getActivity());
         subtasksList = new ArrayList<>();
